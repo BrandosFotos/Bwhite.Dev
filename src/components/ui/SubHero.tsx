@@ -44,31 +44,32 @@ const TextLoop = () => {
 
     return (
         <div className='loop-wrap'>
-            I am a&nbsp;
-            <AnimatePresence>
-                <motion.span
-                    style={{ position: 'absolute' }}
-                    variants={variants}
-                    key={index}
-                    initial='enter'
-                    animate='center'
-                    exit='exit'
-                    transition={{
-                        y: { type: 'spring' },
-                        opacity: { duration: 0.3 }
-                    }}>
-                    {texts[index]}
-                </motion.span>
-            </AnimatePresence>
+            <span>I am a&nbsp;</span>
+            <div className='loop-text-container'>
+                <AnimatePresence>
+                    <motion.span
+                        key={index}
+                        variants={variants}
+                        initial='enter'
+                        animate='center'
+                        exit='exit'
+                        transition={{
+                            y: { type: 'spring' },
+                            opacity: { duration: 0.3 }
+                        }}
+                        className='loop-text'>
+                        {texts[index]}
+                    </motion.span>
+                </AnimatePresence>
+            </div>
         </div>
     );
 };
 
 const Input = () => {
     return (
-        <div className='styled-input-wrap'>
+        <div>
             <TextLoop />
-            <input className='styled-input' />
         </div>
     );
 };

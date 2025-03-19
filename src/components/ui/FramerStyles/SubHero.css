@@ -1,29 +1,23 @@
 .loop-wrap {
-    /* position: absolute; */
-    width: 100%;
-}
-
-.styled-input {
-    border: none;
-    font-weight: 700;
-    font-size: 16px;
-    background-color: unset;
-    width: 100%;
-}
-
-.styled-input-wrap {
-    height: 32px;
-    font-size: 20px;
-    /* background-color: green; */
-    color: var(--primary-background);
     display: flex;
     align-items: center;
-    justify-content: center;
-    /* padding: 4px 16px; */
+    margin-left: 3.5rem; /* Equivalent to ml-14 in Tailwind */
 }
 
-@media (max-width: 768px) {
-    .styled-input-wrap {
-        width: 300px;
-    }
+.loop-wrap span {
+    white-space: nowrap;
+}
+
+.loop-text-container {
+    position: relative;
+    width: 150px;
+    display: inline-block;
+}
+
+.loop-text {
+    font-weight: 600;
+    position: absolute;
+    left: 0;
+    top: -9px; /* Moves text up slightly */
+    transform: translateY(-10%);
 }
