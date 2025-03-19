@@ -1,0 +1,38 @@
+.modal-wrapper {
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+}
+
+.open-button {
+    padding: 10px 20px;
+    cursor: pointer;
+}
+
+.overlay {
+    position: fixed;
+    inset: 0;
+    background: rgba(73, 73, 73, 0.4); /* Semi-transparent dark background */
+    backdrop-filter: blur(10px); /* Blurs the background */
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    z-index: 10; /* Ensures modal is above other content */
+}
+
+.modal-card {
+    background: white;
+    padding: 20px 30px;
+    border-radius: 8px;
+    max-width: 500px;
+    width: 100%;
+    text-align: center;
+    box-shadow: 0px 10px 15px black;
+}
+
+.close-button {
+    margin-top: 20px;
+    padding: 8px 16px;
+    cursor: pointer;
+}
