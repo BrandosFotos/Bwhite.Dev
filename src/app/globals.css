@@ -10,6 +10,7 @@
     --font-sans: 'GeistSans', sans-serif;
     --font-mono: 'GeistMono', monospace;
     --accent-color: rgb(223, 223, 223);
+    --theme-bg-gradient: linear-gradient(to bottom right, #c1d6ff, #f1d4f5, #fce1e4);
 }
 
 /* Ocean Theme */
@@ -19,6 +20,7 @@
     --secondary-background: #a5750398;
     --text-color: #ffffff;
     --accent-color: #176d72;
+    --theme-bg-gradient: linear-gradient(to bottom right, #1e3053, #176d72, #66a3cc);
 }
 
 /* Pink Theme */
@@ -27,6 +29,7 @@
     --foreground: #363636;
     --secondary-background: #effdba; /* Yellow-gold, complementary to blue */
     --accent-color: white;
+    --theme-bg-gradient: linear-gradient(to bottom right, #f1c6d2, #ffd6e8, #fce1e4);
 }
 
 /* Custom Dark Theme */
@@ -35,6 +38,11 @@
     --foreground: #ffffff;
     --secondary-background: #333333; /* White, complementary to black */
     --accent-color: rgb(36, 36, 36);
+  --theme-bg-gradient: radial-gradient(
+    circle at 25% 25%,
+    #141414 100%,
+    #3d3d3d 100%
+  );
 }
 
 /* Forest Theme */
@@ -43,6 +51,7 @@
     --foreground: #d4e157;
     --secondary-background: #cf5f3c; /* A reddish-orange, complementary to green */
     --accent-color: #237a57;
+    --theme-bg-gradient: linear-gradient(to bottom right, #2e422d, #4a5d43, #88b99c);
 }
 
 /* Custom System Theme */
@@ -51,12 +60,13 @@
     --foreground: #171717;
     --secondary-background: #171717; /* Default to black as secondary for light */
     --accent-color: white;
+    --theme-bg-gradient: linear-gradient(to bottom right, #ffffff, #e0e0e0, #dcdcdc);
 }
 
 /* Custom Body Styles */
 body {
     color: var(--foreground);
-    background: var(--background);
+    background: var(--theme-bg-gradient); /* ✅ use the gradient */
     font-family: var(--font-sans), Arial, Helvetica, sans-serif;
     transition:
         background 0.3s ease,

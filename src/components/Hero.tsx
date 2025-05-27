@@ -1,36 +1,70 @@
-import React from 'react';
+'use client';
 
+import React, { forwardRef } from 'react';
+import { motion } from 'framer-motion';
 import SubHero from '@/components/ui/SubHero';
 
-const Example: React.FC = () => {
-    return (
-        <div>
-            {/* We get the font from the Google Fonts API and introduce the hero section. */}
-            <main className='{Fredoka.variable} row-start-2 flex flex-col items-center gap-8'>
-                {/* Hero Section */}
-                <h1 className='{styles.text} text-5xl'>&lt;Bwhite.dev&gt;</h1>
+const Hero = forwardRef<HTMLElement, {}>((_, ref) => {
+  return (
+<section
+  ref={ref}
+  className="min-h-screen w-full flex items-center justify-center -mt-16"
+>
 
-                {/* This is where i built the svg for my Logo:
-              https://danmarshall.github.io/google-font-to-svg-path/ */}
+      <main className="text-center flex flex-col items-center gap-10 max-w-3xl">
+        {/* Logo */}
+        <motion.div
+          initial={{ opacity: 0, scale: 0.9 }}
+          animate={{ opacity: 1, scale: 1 }}
+          transition={{ duration: 0.8, ease: 'easeOut' }}
+        >
+          <svg
+            className="w-16 h-16 mb-4 fill-current text-black dark:text-white"
+            viewBox="0 0 54 54"
+            xmlns="http://www.w3.org/2000/svg"
+          >
+            <path d="M13.5 22.1c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05zM0 38.3c1.8-7.2 6.3-10.8 13.5-10.8 10.8 0 12.15 8.1 17.55 9.45 3.6.9 6.75-.45 9.45-4.05-1.8 7.2-6.3 10.8-13.5 10.8-10.8 0-12.15-8.1-17.55-9.45-3.6-.9-6.75.45-9.45 4.05z" />
+          </svg>
+        </motion.div>
 
-                {/* Unordered list, to keep items organized */}
-                <ul className='list-inside text-center font-[family-name:var(--font-geist-mono)] text-sm sm:text-left'>
-                    <SubHero />
-                </ul>
+        {/* Grand Hero Title */}
+        <motion.h1
+          className="text-5xl sm:text-6xl md:text-7xl font-bold leading-tight tracking-tight bg-clip-text"
+          initial={{ y: 20, opacity: 0 }}
+          animate={{ y: 0, opacity: 1 }}
+          transition={{ delay: 0.2, duration: 0.6 }}
+        >
+          &lt;Bwhite.dev&gt;
+        </motion.h1>
 
-                {/* Button to scoll user to Projects Section */}
-                <div className='flex flex-col items-center gap-4 sm:flex-row'>
-                    <a
-                        className='flex h-10 items-center justify-center rounded-full border border-solid border-black/[.08] px-4 text-sm transition-colors hover:border-transparent hover:bg-[#f2f2f2] sm:h-12 sm:min-w-44 sm:px-5 sm:text-base dark:border-white/[.145] dark:hover:bg-[#1a1a1a]'
-                        href='https://nextjs.org/docs?utm_source=create-next-app&utm_medium=appdir-template-tw&utm_campaign=create-next-app'
-                        target='_blank'
-                        rel='noopener noreferrer'>
-                        Projects
-                    </a>
-                </div>
-            </main>
-        </div>
-    );
-};
+        {/* SubHero Component */}
+        <motion.ul
+          className="list-inside font-mono text-sm text-zinc-600 dark:text-zinc-400 mt-4"
+          initial={{ opacity: 0 }}
+          animate={{ opacity: 1 }}
+          transition={{ delay: 0.5 }}
+        >
+          <SubHero />
+        </motion.ul>
 
-export default Example;
+        {/* CTA Button */}
+        <motion.div
+          className="mt-6"
+          initial={{ scale: 0.95, opacity: 0 }}
+          animate={{ scale: 1, opacity: 1 }}
+          transition={{ delay: 0.7, duration: 0.5 }}
+        >
+          <a
+            className="inline-flex items-center justify-center px-6 py-3 text-base font-semibold text-white rounded-full bg-zinc-900 dark:bg-white dark:text-black hover:bg-zinc-700 dark:hover:bg-zinc-200 transition-all shadow-md hover:shadow-lg"
+            href="#projects"
+          >
+            View Projects
+          </a>
+        </motion.div>
+      </main>
+    </section>
+  );
+});
+
+Hero.displayName = 'Hero';
+export default Hero;

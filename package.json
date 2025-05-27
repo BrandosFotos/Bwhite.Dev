@@ -7,7 +7,7 @@
     "scripts": {
         "dev": "next dev --turbopack",
         "build": "next build",
-        "start": "next start",
+        "start": "next start -p 3009",
         "lint": "next lint",
         "lint:fix": "eslint --fix \"src/**/*.{js,jsx,ts,tsx}\"",
         "format": "prettier --write \"src/**/*.{js,jsx,ts,tsx}\""

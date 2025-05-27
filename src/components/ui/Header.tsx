@@ -1,18 +1,21 @@
 'use client';
 
-import React, { useEffect, useState } from 'react';
+import React, { useEffect, useState, useRef } from 'react';
 
 import Link from 'next/link';
 
 import ThemeSwitcher from '@/components/ui/ThemeSwitch';
 
-
-import { AnimatePresence, motion } from "framer-motion";
+import { AnimatePresence,motion ,useAnimation, useInView} from "framer-motion";
 import '@/components/ui/FramerStyles/NavMenuModal.css'
 
 
+interface HeaderProps {
+  heroRef: React.RefObject<HTMLElement | null>;
+}
+
 interface ModalProps {
-    onClose: () => void;
+  onClose: () => void;
 }
 
 function Modal ({ onClose }: ModalProps) {
@@ -40,7 +43,7 @@ function Modal ({ onClose }: ModalProps) {
             {/* Links Aligned to the Left */}
         <nav className="flex flex-col items-center space-y-4">
             <Link href="/about" className="hover:opacity-70 text-lg">
-                About Mes
+                About Me
             </Link>
             <Link href="/contact" className="hover:opacity-70 text-lg">
                 Contact Me
@@ -65,18 +68,44 @@ function Modal ({ onClose }: ModalProps) {
 
 
 
-const Header: React.FC = () => {
+const Header: React.FC<HeaderProps> = ({ heroRef }) => {
     const [isOpen, setIsOpen] = useState(false);
     const [theme, setTheme] = useState('');
 
+    // Watch scroll past hero
+    const [isHeroInView, setIsHeroInView] = useState(true);
 
+useEffect(() => {
+  if (!heroRef.current) return;
+
+  const observer = new IntersectionObserver(
+    ([entry]) => setIsHeroInView(entry.isIntersecting),
+    { rootMargin: '-100px' }
+  );
+
+  observer.observe(heroRef.current);
+
+  return () => {
+    if (heroRef.current) observer.unobserve(heroRef.current);
+  };
+}, [heroRef]);
+
+const inView = isHeroInView;
+
+    const controls = useAnimation();
 
     useEffect(() => {
-        // Get current theme from document attribute
+        controls.start({
+            y: inView ? -100 : 0,
+            opacity: inView ? 0 : 3,
+            transition: { duration: 0.4, ease: 'easeOut' },
+        });
+    }, [inView]);
+
+    useEffect(() => {
         const currentTheme = document.documentElement.getAttribute('data-theme') || 'light';
         setTheme(currentTheme);
 
-        // Listen for theme changes
         const observer = new MutationObserver(() => {
             const newTheme = document.documentElement.getAttribute('data-theme') || 'light';
             setTheme(newTheme);
@@ -90,6 +119,11 @@ const Header: React.FC = () => {
 
 
     return (
+        <motion.nav
+        animate={controls}
+        initial={{ y: -100, opacity: 0 }}
+        className={`fixed top-0 left-0 right-0 z-50 backdrop-blur-md bg-white/80 dark:bg-black/50 transition-all duration-300`}>
+            
         <nav className={`flex flex-wrap items-center justify-between p-6 transition-all duration-300`}>
             {/* Logo */}
             <div className='mr-6 flex flex-shrink-0 items-center'>
@@ -152,6 +186,7 @@ const Header: React.FC = () => {
                 </a>
             </div>
         </nav>
+        </motion.nav>
     );
 };
 
