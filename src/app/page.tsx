@@ -1,13 +1,14 @@
 'use client';
+
+import { useRef } from 'react';
+
 import Education from '@/components/Education';
 import Hero from '@/components/Hero';
 import Footer from '@/components/ui/Footer';
 import Header from '@/components/ui/Header';
 
-import { useRef } from 'react';
-
 export default function Home() {
-    const heroRef = useRef<HTMLElement | null>(null);
+    const heroRef = useRef<HTMLElement>(null);
 
     return (
         <div
