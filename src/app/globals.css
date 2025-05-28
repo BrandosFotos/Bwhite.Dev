@@ -38,11 +38,7 @@
     --foreground: #ffffff;
     --secondary-background: #333333; /* White, complementary to black */
     --accent-color: rgb(36, 36, 36);
-  --theme-bg-gradient: radial-gradient(
-    circle at 25% 25%,
-    #141414 100%,
-    #3d3d3d 100%
-  );
+    --theme-bg-gradient: radial-gradient(circle at 25% 25%, #141414 100%, #3d3d3d 100%);
 }
 
 /* Forest Theme */
