@@ -5,6 +5,7 @@ import { useRef } from 'react';
 import Education from '@/components/Education';
 import Experience from '@/components/ExperienceCard';
 import Hero from '@/components/Hero';
+import HobbyCard from '@/components/HobbyCard';
 import Footer from '@/components/ui/Footer';
 
 export default function Home() {
@@ -20,6 +21,7 @@ export default function Home() {
                 <Hero ref={heroRef} />
                 <Education />
                 <Experience />
+                <HobbyCard />
             </main>
             <Footer />
         </div>
