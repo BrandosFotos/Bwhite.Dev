@@ -6,8 +6,6 @@ import '@/components/ui/FramerStyles/SubHero.css';
 
 import { AnimatePresence, motion } from 'framer-motion';
 
-// Import the new CSS file
-
 const texts = ['Coder', 'Designer', 'Content Creator', 'Developer', 'Freelancer'];
 const variants = {
     enter: (direction: string) => {

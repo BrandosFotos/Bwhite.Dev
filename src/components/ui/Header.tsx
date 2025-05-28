@@ -125,21 +125,15 @@ const Header: React.FC<HeaderProps> = ({ heroRef }) => {
 
                 {/* Mobile Menu Button */}
                 <div className='block lg:hidden'>
-                    {!isOpen && (
-                        <div className='flex items-center justify-center bg-transparent'>
-                            <button
-                                onClick={() => setIsOpen(true)}
-                                className='open-button flex items-center rounded border px-4 py-3 text-lg transition-all hover:border-white hover:text-white'>
-                                <svg
-                                    className='h-5 w-5 fill-current'
-                                    viewBox='0 0 20 20'
-                                    xmlns='http://www.w3.org/2000/svg'>
-                                    <path d='M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z' />
-                                </svg>
-                            </button>
-                        </div>
-                    )}
+                    <button
+                        onClick={() => setIsOpen(true)}
+                        className='open-button flex items-center rounded border px-3 py-2 hover:border-white hover:text-white'>
+                        <svg className='h-4 w-4 fill-current' viewBox='0 0 20 20' xmlns='http://www.w3.org/2000/svg'>
+                            <path d='M0 3h20v2H0V3zm0 6h20v2H0V9zm0 6h20v2H0v-2z' />
+                        </svg>
+                    </button>
 
+                    {/* Dropdown Menu (Visible when isOpen is true) */}
                     <AnimatePresence>{isOpen && <Modal onClose={() => setIsOpen(false)} />}</AnimatePresence>
                 </div>
 

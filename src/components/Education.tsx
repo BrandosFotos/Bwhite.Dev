@@ -1,7 +1,9 @@
 'use client';
 
 import React from 'react';
+
 import { Chip } from '@heroui/chip';
+
 import { motion } from 'framer-motion';
 
 export type EducationType = {
@@ -22,7 +24,7 @@ export const educationInfo: EducationType[] = [
         desc: '',
         grade: 'Grade A , GPA: 3.60',
         descBullets: [],
-        location: 'Online',
+        location: 'Online'
     },
     {
         schoolName: 'Pellissippi State Community College',
@@ -31,7 +33,7 @@ export const educationInfo: EducationType[] = [
         desc: '',
         grade: 'Grade A , GPA: 3.71',
         descBullets: [],
-        location: 'Online',
+        location: 'Online'
     },
     {
         schoolName: 'University of Tenneessee Chattanooga',
@@ -40,8 +42,8 @@ export const educationInfo: EducationType[] = [
         desc: '',
         grade: '',
         descBullets: [],
-        location: 'Online',
-    },
+        location: 'Online'
+    }
 ];
 
 function Education() {
@@ -53,13 +55,11 @@ function Education() {
                     {educationInfo.map((education, index) => (
                         <motion.li
                             key={index}
-                            className='rounded-4xl border border-white/10 bg-white/5 backdrop-blur-lg p-6 shadow-xl transition duration-300 hover:shadow-2xl'
+                            className='rounded-4xl border border-white/20 bg-white/20 p-6 shadow-lg backdrop-blur-md transition duration-300 hover:bg-white/25 hover:shadow-2xl'
                             // initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
+                            // animate={{ opacity: 1, y: 0 }}
                             exit={{ opacity: 0, y: -20 }}
-                            transition={{ duration: 0.6, delay: index * 0.5, ease: 'easeOut' }}
-                            >
-                            
+                            transition={{ duration: 0.6, delay: index * 0.5, ease: 'easeOut' }}>
                             <div className='flex items-center justify-between'>
                                 <h3 className='text-lg font-semibold'>{education.schoolName}</h3>
                             </div>
