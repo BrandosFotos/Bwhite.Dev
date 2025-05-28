@@ -3,10 +3,9 @@
 import { useRef } from 'react';
 
 import Education from '@/components/Education';
+import Experience from '@/components/ExperienceCard';
 import Hero from '@/components/Hero';
-import HobbyCard from '@/components/HobbyCard';
 import Footer from '@/components/ui/Footer';
-import Header from '@/components/ui/Header';
 
 export default function Home() {
     const heroRef = useRef<HTMLElement>(null);
@@ -20,7 +19,7 @@ export default function Home() {
             <main>
                 <Hero ref={heroRef} />
                 <Education />
-                <HobbyCard />
+                <Experience />
             </main>
             <Footer />
         </div>
