@@ -4,6 +4,7 @@ import React, { forwardRef } from 'react';
 
 import SubHero from '@/components/ui/SubHero';
 
+import ScrollNavbar from './ScrollNavBar';
 import { motion } from 'framer-motion';
 
 const Hero = forwardRef<HTMLElement, {}>((_, ref) => {
@@ -53,6 +54,8 @@ const Hero = forwardRef<HTMLElement, {}>((_, ref) => {
                         View Projects
                     </a>
                 </motion.div>
+
+                <ScrollNavbar />
             </main>
         </section>
     );
