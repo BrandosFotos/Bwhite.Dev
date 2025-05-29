@@ -1,0 +1,107 @@
+.hobby-card-container {
+    width: 400px;
+    height: 250px;
+    background: #222;
+    border-radius: 24px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    position: relative;
+    overflow: hidden;
+    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+}
+
+.hobby-bubble {
+    position: absolute;
+    transform: translate(-50%, -50%);
+    z-index: 1;
+    cursor: pointer;
+    user-select: none;
+}
+
+.hobby-bubble-enlarged {
+    z-index: 2;
+}
+
+.hobby-circle {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-weight: 600;
+    font-size: 26px;
+    color: #222;
+    position: relative;
+    transition: box-shadow 0.2s;
+}
+
+/* Modal styles */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.6);
+    z-index: 1000;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background: #fff;
+    padding: 2rem;
+    border-radius: 1rem;
+    z-index: 1001;
+    width: 320px;
+    text-align: center;
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
+    transform: translate(-50%, -50%);
+}
+
+.modal button {
+    margin-top: 1.5rem;
+    background: #222;
+    color: #fff;
+    border: none;
+    padding: 0.6rem 1.2rem;
+    border-radius: 0.5rem;
+    cursor: pointer;
+}
+
+.card-container {
+    position: relative;
+    width: 100%;
+    height: 400px;
+}
+
+.circle-wrapper {
+    position: absolute;
+    width: 80px;
+    height: 80px;
+    transform: translate(-50%, -50%);
+    transition:
+        transform 0.4s cubic-bezier(0.4, 2, 0.6, 1),
+        left 0.8s,
+        top 0.8s;
+    z-index: 1;
+    cursor: pointer;
+}
+
+.circle {
+    width: 100%;
+    height: 100%;
+    border-radius: 50%;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    font-size: 24px;
+    color: white;
+    background-color: gray; /* will be overridden inline via `style={{ background: hobby.color }}` */
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    user-select: none;
+}
