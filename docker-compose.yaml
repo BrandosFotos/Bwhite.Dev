@@ -11,34 +11,33 @@ services:
             - PORT=${PORT}
             - HOSTNAME=${HOSTNAME}
             - DATABASE_URL=${DATABASE_URL}
-        depends_on:
-            - postgres
+        # depends_on:
+        #     - postgres
         restart: unless-stopped
 
-    postgres:
-        image: postgres:16
-        container_name: postgres-db
-        environment:
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-            - POSTGRES_DB=${POSTGRES_DB}
-        ports:
-            - '5432:5432'
-        volumes:
-            - postgres_data:/var/lib/postgresql/data
-        restart: unless-stopped
+    # postgres:
+    #     image: postgres:16
+    #     container_name: postgres-db
+    #     environment:
+    #         - POSTGRES_USER=${POSTGRES_USER}
+    #         - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
+    #         - POSTGRES_DB=${POSTGRES_DB}
+    #     ports:
+    #         - '5432:5432'
+    #     volumes:
+    #         - postgres_data:/var/lib/postgresql/data
+    #     restart: unless-stopped
 
-    pgadmin:
-        image: dpage/pgadmin4
-        container_name: pgadmin
-        environment:
-            - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
-            - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
-        ports:
-            - '8080:80'
-        depends_on:
-            - postgres
-        restart: unless-stopped
-
-volumes:
-    postgres_data:
+    # pgadmin:
+    #     image: dpage/pgadmin4
+    #     container_name: pgadmin
+    #     environment:
+    #         - PGADMIN_DEFAULT_EMAIL=${PGADMIN_DEFAULT_EMAIL}
+    #         - PGADMIN_DEFAULT_PASSWORD=${PGADMIN_DEFAULT_PASSWORD}
+    #     ports:
+    #         - '8080:80'
+    #     depends_on:
+    #         - postgres
+    #     restart: unless-stopped
+# volumes:
+#     postgres_data:

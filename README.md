@@ -1,6 +1,7 @@
 # Next.js 15 Starter (tailwind) [[LIVE DEMO](https://nextjs-15-starter-tailwind.vercel.app/)]
 
 *This is the Tailwind version for Next.js 15 Starter, you may be interested in other templates too -*
+
 - [**Next.js 15 Starter Core**](https://github.com/SiddharthaMaity/nextjs-15-starter-core)
 - [**Next.js 15 Starter with Shadcn UI**](https://github.com/SiddharthaMaity/nextjs-15-starter-shadcn)
 
@@ -57,7 +58,7 @@ To enhance development experience, install the following VS Code extensions:
 - [**Package Json Upgrade**](https://marketplace.visualstudio.com/items?itemName=codeandstuff.package-json-upgrade)
 - [**Visual Studio Code Commitizen Support**](https://marketplace.visualstudio.com/items?itemName=KnisterPeter.vscode-commitizen)
 - [**Markdown All in One**](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
-
+- [**Prisma**]<https://marketplace.visualstudio.com/items?itemName=Prisma.prisma>
 
 ## 🏁 Getting Started
 
@@ -69,12 +70,14 @@ To enhance development experience, install the following VS Code extensions:
 ### Installation
 
 1. **Clone the Repository**:
+
     ```bash
     git clone https://github.com/yourusername/nextjs-15-starter-tailwind.git
     cd nextjs-15-starter-tailwind
     ```
 
 2. **Install Dependencies**:
+
     ```bash
     npm install
     # or with Yarn
@@ -82,6 +85,7 @@ To enhance development experience, install the following VS Code extensions:
     ```
 
 3. **Run Development Server**:
+
     ```bash
     npm run dev
     # or with Yarn
@@ -89,6 +93,7 @@ To enhance development experience, install the following VS Code extensions:
     ```
 
 4. **Build for Production**:
+
     ```bash
     npm run build
     ```

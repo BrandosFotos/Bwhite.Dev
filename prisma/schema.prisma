@@ -6,7 +6,6 @@
 
 generator client {
   provider = "prisma-client-js"
-  output   = "../src/generated/prisma"
 }
 
 datasource db {
@@ -14,9 +13,23 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+
 model User {
-  id Int @id @default(autoincrement())
-  email String
-  password String
-  name String?
+  id        Int @id @default(autoincrement())
+  email     String @unique
+  password  String
+  name      String?
+
+  uploads   Uploads[]
+}
+
+
+model Uploads {
+  id        Int      @id @default(autoincrement())
+  userId    Int
+  fileName  String
+  filePath  String
+  createdAt DateTime @default(now())
+  
+  user User @relation(fields: [userId], references: [id])
 }
