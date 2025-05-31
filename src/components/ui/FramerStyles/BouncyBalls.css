@@ -1,16 +1,40 @@
+/* src/components/ui/FramerStyles/BouncyBalls.css */
+
 .hobby-card-container {
-    width: 400px;
-    height: 250px;
-    background: #222;
-    border-radius: 24px;
+    width: 100%; /* Make it responsive */
+    max-width: 500px; /* Maximum width for larger screens */
+    height: 350px;
+    margin: 0 auto; /* Center the container */
+    background: linear-gradient(135deg, #f0f2f5 0%, #e0e5ec 100%);
+    border-radius: 30px;
     display: flex;
     align-items: center;
     justify-content: center;
     position: relative;
     overflow: hidden;
-    box-shadow: 0 4px 24px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.25);
+    border: 1px solid rgba(255, 255, 255, 0.6);
+    backdrop-filter: blur(15px);
 }
 
+@media (max-width: 768px) {
+    .hobby-card-container {
+        width: 95%; /* Slightly less than full width on mobile */
+        height: 300px; /* Slightly shorter on mobile */
+        border-radius: 20px; /* Smaller border radius on mobile */
+    }
+
+    .circle-wrapper {
+        width: 70px; /* Smaller bubbles on mobile */
+        height: 70px;
+    }
+
+    .circle {
+        font-size: 2.5rem; /* Smaller icons on mobile */
+    }
+}
+
+/* Consider removing .hobby-bubble if .circle-wrapper is solely used */
 .hobby-bubble {
     position: absolute;
     transform: translate(-50%, -50%);
@@ -23,73 +47,25 @@
     z-index: 2;
 }
 
-.hobby-circle {
-    width: 60px;
-    height: 60px;
-    border-radius: 50%;
-    box-shadow: 0 2px 12px rgba(0, 0, 0, 0.15);
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    font-weight: 600;
-    font-size: 26px;
-    color: #222;
-    position: relative;
-    transition: box-shadow 0.2s;
-}
-
-/* Modal styles */
-.modal-backdrop {
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100vw;
-    height: 100vh;
-    background-color: rgba(0, 0, 0, 0.6);
-    z-index: 1000;
-}
-
-.modal {
-    position: fixed;
-    top: 50%;
-    left: 50%;
-    background: #fff;
-    padding: 2rem;
-    border-radius: 1rem;
-    z-index: 1001;
-    width: 320px;
-    text-align: center;
-    box-shadow: 0 12px 40px rgba(0, 0, 0, 0.2);
-    transform: translate(-50%, -50%);
-}
-
-.modal button {
-    margin-top: 1.5rem;
-    background: #222;
-    color: #fff;
-    border: none;
-    padding: 0.6rem 1.2rem;
-    border-radius: 0.5rem;
-    cursor: pointer;
-}
-
-.card-container {
-    position: relative;
-    width: 100%;
-    height: 400px;
-}
-
+/* The .hobby-circle was merged into .circle for consistency with .tsx */
 .circle-wrapper {
     position: absolute;
-    width: 80px;
-    height: 80px;
+    width: 90px; /* Slightly larger bubbles */
+    height: 90px; /* Slightly larger bubbles */
     transform: translate(-50%, -50%);
     transition:
         transform 0.4s cubic-bezier(0.4, 2, 0.6, 1),
         left 0.8s,
-        top 0.8s;
+        top 0.8s,
+        box-shadow 0.3s ease; /* Add box-shadow to transition */
     z-index: 1;
     cursor: pointer;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.15); /* Soft shadow */
+    border-radius: 50%; /* Ensure it's a circle even if height/width are different */
+}
+
+.circle-wrapper:hover {
+    box-shadow: 0 8px 20px rgba(0, 0, 0, 0.25); /* More prominent shadow on hover */
 }
 
 .circle {
@@ -99,9 +75,88 @@
     display: flex;
     align-items: center;
     justify-content: center;
-    font-size: 24px;
+    font-size: 3rem; /* Larger icons */
     color: white;
-    background-color: gray; /* will be overridden inline via `style={{ background: hobby.color }}` */
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.2);
+    text-shadow: 0 2px 4px rgba(0, 0, 0, 0.2); /* Subtle text shadow for depth */
+    /* Inner gradient for a glossy, spherical look */
+    background:
+        radial-gradient(circle at 20% 20%, rgba(255, 255, 255, 0.6) 0%, transparent 50%), var(--background-color); /* Uses dynamic color */
+    box-shadow:
+        inset 0 2px 5px rgba(255, 255, 255, 0.4),
+        /* Inner white shadow */ inset 0 -2px 5px rgba(0, 0, 0, 0.15); /* Inner black shadow */
     user-select: none;
+    -webkit-user-select: none; /* Safari, Chrome */
+    -moz-user-select: none; /* Firefox */
+    -ms-user-select: none;
+}
+
+/* Modal styles */
+.modal-backdrop {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100vw;
+    height: 100vh;
+    background-color: rgba(0, 0, 0, 0.7); /* Darker backdrop */
+    z-index: 1000;
+}
+
+.modal {
+    position: fixed;
+    top: 50%;
+    left: 50%;
+    background: rgba(255, 255, 255, 0.9); /* Softer white with transparency */
+    padding: 3rem; /* More padding */
+    border-radius: 20px; /* More rounded corners */
+    z-index: 1001;
+    max-width: 450px; /* Wider modal */
+    width: 90%; /* Responsive width */
+    text-align: center;
+    box-shadow: 0 18px 60px rgba(0, 0, 0, 0.3); /* More pronounced shadow */
+    transform: translate(-50%, -50%);
+    backdrop-filter: blur(25px); /* Frosted glass effect for modal */
+    border: 1px solid rgba(255, 255, 255, 0.7); /* Subtle border for modal */
+}
+
+.modal-title {
+    font-size: 2.5rem; /* Larger title */
+    font-weight: 700; /* Bolder title */
+    color: #1a1a1a;
+    margin-bottom: 1.5rem;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+}
+
+.modal-description {
+    font-size: 1.1rem; /* Slightly larger description text */
+    line-height: 1.6;
+    color: #555;
+    margin-bottom: 2rem; /* More space below description */
+}
+
+.modal button {
+    margin-top: 1.5rem;
+    background: #007aff; /* Apple-like blue */
+    color: #fff;
+    border: none;
+    padding: 0.8rem 1.8rem; /* More padding */
+    border-radius: 12px; /* More rounded button */
+    cursor: pointer;
+    font-size: 1.1rem; /* Larger button text */
+    font-weight: 600; /* Bolder button text */
+    transition:
+        background 0.2s ease,
+        transform 0.1s ease;
+    box-shadow: 0 4px 15px rgba(0, 122, 255, 0.2); /* Subtle button shadow */
+}
+
+.modal button:hover {
+    background: #005bb5; /* Darker blue on hover */
+    transform: translateY(-2px); /* Slight lift */
+}
+
+.modal button:active {
+    transform: translateY(0); /* Press effect */
 }

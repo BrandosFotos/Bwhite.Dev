@@ -6,6 +6,7 @@ import Education from '@/components/Education';
 import Experience from '@/components/ExperienceCard';
 import Hero from '@/components/Hero';
 import HobbyCard from '@/components/HobbyCard';
+import ProjectsCarousel from '@/components/ProjectsCarousel/ProjectsCarousel';
 import SearchForm from '@/components/UserData';
 import Footer from '@/components/ui/Footer';
 
@@ -18,8 +19,8 @@ export default function Home() {
                 <Hero />
                 <Education />
                 <Experience />
-                <HobbyCard />
-                <SearchForm />
+                <HobbyCard />/{/* <SearchForm /> */}
+                <ProjectsCarousel />
             </main>
             <Footer />
         </div>
