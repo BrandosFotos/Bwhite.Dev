@@ -124,14 +124,14 @@ export default function ProjectsCarousel({ projects = projectsData }: ProjectsCa
 
     return (
         <div
-            className='relative h-[750px] w-full overflow-hidden md:h-[700px] lg:h-[650px]'
+            className='relative h-[750px] w-full overflow-hidden min-[1100px]:h-[650px] min-[1100px]:h-[700px]'
             onMouseEnter={handleMouseEnter}
             onMouseLeave={handleMouseLeave}
             onTouchStart={handleMouseEnter}
             onTouchEnd={handleMouseLeave}>
             <div className='absolute inset-0 flex items-center justify-center py-8 [perspective:1500px]'>
                 <AnimatePresence initial={false} custom={direction} mode='popLayout'>
-                    <div className='relative flex w-full items-center justify-center gap-2 md:gap-8'>
+                    <div className='relative flex w-full items-center justify-center gap-2 min-[1100px]:gap-8'>
                         {visibleProjects.map((project, index) => (
                             <motion.div
                                 key={`${project.id}-${project.position}`}
@@ -151,8 +151,8 @@ export default function ProjectsCarousel({ projects = projectsData }: ProjectsCa
                                 onDragEnd={handleDragEnd}
                                 className={`relative transform-gpu ${
                                     project.position === 0
-                                        ? 'z-20 h-full w-[90vw] cursor-grab active:cursor-grabbing md:w-[80vw] lg:w-[600px]'
-                                        : 'z-10 hidden h-[90%] opacity-50 md:block md:w-[300px] lg:w-[400px]'
+                                        ? 'z-20 h-full w-[90vw] cursor-grab active:cursor-grabbing min-[1100px]:w-[80vw] min-[1100px]:w-[600px]'
+                                        : 'z-10 hidden h-[90%] opacity-50 min-[1100px]:block min-[1100px]:w-[300px] min-[1100px]:w-[400px]'
                                 }`}
                                 style={{
                                     transformStyle: 'preserve-3d'
@@ -168,21 +168,23 @@ export default function ProjectsCarousel({ projects = projectsData }: ProjectsCa
                                     </div>
 
                                     {/* Project Info */}
-                                    <div className='flex h-[calc(100%-56.25%)] flex-col justify-between p-4 md:p-6'>
+                                    <div className='flex h-[calc(100%-56.25%)] flex-col justify-between p-4 min-[1100px]:p-6'>
                                         <div>
-                                            <h3 className='mb-2 text-xl font-bold text-gray-900 md:text-2xl'>
+                                            <h3 className='mb-2 text-xl font-bold text-gray-900 min-[1100px]:text-2xl'>
                                                 {project.title}
                                             </h3>
-                                            <p className='text-sm text-gray-600 md:text-base'>{project.description}</p>
+                                            <p className='text-sm text-gray-600 min-[1100px]:text-base'>
+                                                {project.description}
+                                            </p>
                                         </div>
 
                                         <div className='space-y-4'>
                                             {/* Technologies */}
-                                            <div className='flex flex-wrap gap-1.5 md:gap-2'>
+                                            <div className='flex flex-wrap gap-1.5 min-[1100px]:gap-2'>
                                                 {project.technologies?.map((tech: string, idx: number) => (
                                                     <span
                                                         key={idx}
-                                                        className='rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600 transition-colors hover:bg-gray-200 md:px-3 md:text-sm'>
+                                                        className='rounded-full bg-gray-100 px-2 py-1 text-xs text-gray-600 transition-colors hover:bg-gray-200 min-[1100px]:px-3 min-[1100px]:text-sm'>
                                                         {tech}
                                                     </span>
                                                 ))}
@@ -195,7 +197,7 @@ export default function ProjectsCarousel({ projects = projectsData }: ProjectsCa
                                                         href={project.githubUrl}
                                                         target='_blank'
                                                         rel='noopener noreferrer'
-                                                        className='text-sm text-gray-600 transition-all duration-200 hover:scale-105 hover:text-gray-900 md:text-base'>
+                                                        className='text-sm text-gray-600 transition-all duration-200 hover:scale-105 hover:text-gray-900 min-[1100px]:text-base'>
                                                         GitHub
                                                     </a>
                                                 )}
@@ -204,7 +206,7 @@ export default function ProjectsCarousel({ projects = projectsData }: ProjectsCa
                                                         href={project.liveUrl}
                                                         target='_blank'
                                                         rel='noopener noreferrer'
-                                                        className='text-sm text-gray-600 transition-all duration-200 hover:scale-105 hover:text-gray-900 md:text-base'>
+                                                        className='text-sm text-gray-600 transition-all duration-200 hover:scale-105 hover:text-gray-900 min-[1100px]:text-base'>
                                                         Live Demo
                                                     </a>
                                                 )}
@@ -221,17 +223,25 @@ export default function ProjectsCarousel({ projects = projectsData }: ProjectsCa
             {/* Navigation Buttons */}
             <button
                 onClick={handlePrevious}
-                className='absolute top-1/2 left-2 -translate-y-1/2 touch-manipulation rounded-full bg-white/80 p-2 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-white hover:shadow-xl md:left-4 md:p-3'
+                className='absolute top-1/2 left-2 -translate-y-1/2 touch-manipulation rounded-full bg-white/80 p-2 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-white hover:shadow-xl min-[1100px]:left-4 min-[1100px]:p-3'
                 aria-label='Previous project'>
-                <svg className='h-5 w-5 md:h-6 md:w-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <svg
+                    className='h-5 w-5 min-[1100px]:h-6 min-[1100px]:w-6'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M15 19l-7-7 7-7' />
                 </svg>
             </button>
             <button
                 onClick={handleNext}
-                className='absolute top-1/2 right-2 -translate-y-1/2 touch-manipulation rounded-full bg-white/80 p-2 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-white hover:shadow-xl md:right-4 md:p-3'
+                className='absolute top-1/2 right-2 -translate-y-1/2 touch-manipulation rounded-full bg-white/80 p-2 shadow-lg transition-all duration-200 hover:scale-110 hover:bg-white hover:shadow-xl min-[1100px]:right-4 min-[1100px]:p-3'
                 aria-label='Next project'>
-                <svg className='h-5 w-5 md:h-6 md:w-6' fill='none' stroke='currentColor' viewBox='0 0 24 24'>
+                <svg
+                    className='h-5 w-5 min-[1100px]:h-6 min-[1100px]:w-6'
+                    fill='none'
+                    stroke='currentColor'
+                    viewBox='0 0 24 24'>
                     <path strokeLinecap='round' strokeLinejoin='round' strokeWidth={2} d='M9 5l7 7-7 7' />
                 </svg>
             </button>

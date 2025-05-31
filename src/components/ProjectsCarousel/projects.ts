@@ -10,33 +10,23 @@ export interface Project {
 
 export const projectsData: Project[] = [
     {
-        id: 'portfolio',
-        title: 'Personal Portfolio',
+        id: 'os-ready',
+        title: 'OS-Ready',
         description:
-            'A modern, responsive portfolio website built with Next.js, React, and TailwindCSS. Features dynamic content loading and smooth animations.',
-        image: '/projects/portfolio.jpg',
-        technologies: ['Next.js', 'React', 'TailwindCSS', 'TypeScript', 'Framer Motion'],
-        githubUrl: 'https://github.com/username/portfolio',
-        liveUrl: 'https://portfolio.dev'
+            'OS-Ready is a lightweight command-line utility designed to automate fresh installations and system configuration across Windows, macOS, and Linux using Ansible and Chocolatey.',
+        image: '/projects/os-ready.png',
+        technologies: ['C++', 'Powershell', 'Shell'],
+        githubUrl: 'https://github.com/BrandosFotos/OS-Ready'
+        // liveUrl: 'https://portfolio.dev'
     },
     {
-        id: 'dashboard',
-        title: 'Analytics Dashboard',
+        id: 'StarGuide',
+        title: 'StarGuide (Coming Soon)',
         description:
-            'Real-time analytics dashboard with interactive charts and data visualization. Built with React and D3.js.',
-        image: '/projects/dashboard.jpg',
-        technologies: ['React', 'D3.js', 'TypeScript', 'Material-UI', 'Redux'],
-        githubUrl: 'https://github.com/username/analytics-dashboard',
-        liveUrl: 'https://analytics-dashboard.dev'
-    },
-    {
-        id: 'ecommerce',
-        title: 'E-commerce Platform',
-        description:
-            'Full-featured e-commerce platform with product management, shopping cart, and secure checkout integration.',
-        image: '/projects/ecommerce.jpg',
-        technologies: ['Next.js', 'Node.js', 'MongoDB', 'Stripe', 'TailwindCSS'],
-        githubUrl: 'https://github.com/username/ecommerce',
-        liveUrl: 'https://ecommerce-platform.dev'
+            "Our Ultimate Companion for the Verse. Navigate the stars with precision. StarGuide is your all-in-one resource for hauling, salvaging, and mining in Star Citizen. Whether you're charting trade routes, stripping derelicts, or extracting precious ore, StarGuide empowers you with real-time insights, profit metrics, and route optimization to make every journey count.",
+        image: '/projects/starguide.png',
+        technologies: ['React', 'Framer-Motion', 'D3.js', 'TypeScript', 'Material-UI', 'Redux']
+        // githubUrl: 'https://github.com/username/analytics-dashboard',
+        // liveUrl: 'https://analytics-dashboard.dev'
     }
 ];
