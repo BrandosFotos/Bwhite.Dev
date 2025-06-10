@@ -8,6 +8,7 @@ import Hero from '@/components/Hero';
 import HobbyCard from '@/components/HobbyCard';
 import ProjectsCarousel from '@/components/ProjectsCarousel/ProjectsCarousel';
 import SearchForm from '@/components/UserData';
+import ContactForm from '@/components/ui/ContactForm/contactform';
 import Footer from '@/components/ui/Footer';
 
 export default function Home() {
@@ -19,8 +20,10 @@ export default function Home() {
                 <Hero />
                 <Education />
                 <Experience />
-                <HobbyCard />/{/* <SearchForm /> */}
+                {/* <HobbyCard /> */}
+                {/* <SearchForm /> */}
                 <ProjectsCarousel />
+                <ContactForm />
             </main>
             <Footer />
         </div>
