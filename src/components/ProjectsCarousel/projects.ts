@@ -28,5 +28,15 @@ export const projectsData: Project[] = [
         technologies: ['React', 'Framer-Motion', 'D3.js', 'TypeScript', 'Material-UI', 'Redux']
         // githubUrl: 'https://github.com/username/analytics-dashboard',
         // liveUrl: 'https://analytics-dashboard.dev'
+    },
+    {
+        id: 'simple-sprinkler',
+        title: 'Simple Sprinkler',
+        description:
+            'A simple integration, involving the opensprinkler api, to control your sprinklers from hardwired buttons.',
+        image: '/projects/sprinkler.png',
+        technologies: ['Python', 'OpenSprinkler API', 'Flask', 'HTML', 'Shell']
+        // githubUrl: 'https://github.com/username/analytics-dashboard',
+        // liveUrl: 'https://analytics-dashboard.dev'
     }
 ];
