@@ -2,12 +2,14 @@
 
 import { useState } from 'react';
 
-import { useRouter } from 'next/navigation';
+import { useRouter, useSearchParams } from 'next/navigation';
 
 import { signIn } from 'next-auth/react';
 
 export default function LoginForm() {
     const router = useRouter();
+    const searchParams = useSearchParams();
+    const callbackUrl = searchParams.get('callbackUrl') || '/';
     const [error, setError] = useState<string | null>(null);
     const [loading, setLoading] = useState(false);
 
@@ -24,16 +26,17 @@ export default function LoginForm() {
             const result = await signIn('credentials', {
                 email,
                 password,
-                redirect: false
+                redirect: false,
+                callbackUrl
             });
 
-            if (result?.error) {
+            if (!result?.error) {
+                // Successful login
+                router.push(callbackUrl);
+                router.refresh();
+            } else {
                 setError('Invalid email or password');
-                return;
             }
-
-            router.push('/dashboard');
-            router.refresh();
         } catch (error) {
             setError('Something went wrong. Please try again.');
         } finally {
@@ -54,6 +57,7 @@ export default function LoginForm() {
                     placeholder='name@example.com'
                     required
                     className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm'
+                    disabled={loading}
                 />
             </div>
             <div className='space-y-2'>
@@ -66,6 +70,7 @@ export default function LoginForm() {
                     type='password'
                     required
                     className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm'
+                    disabled={loading}
                 />
             </div>
             {error && <div className='text-sm text-red-500'>{error}</div>}
