@@ -47,6 +47,14 @@ function Modal({ onClose }: ModalProps) {
                     <Link href='/projects' className='text-lg hover:opacity-70'>
                         Projects
                     </Link>
+                    <div className='mt-4 flex flex-col items-center space-y-4'>
+                        <Link href='/login' className='text-lg hover:opacity-70'>
+                            Login
+                        </Link>
+                        <Link href='/register' className='text-lg hover:opacity-70'>
+                            Register
+                        </Link>
+                    </div>
                 </nav>
 
                 <button className='close-button' onClick={onClose}>
@@ -148,6 +156,14 @@ const Header: React.FC<HeaderProps> = ({ heroRef }) => {
                     <Link href='/projects' className='mx-4 hover:opacity-70'>
                         Projects
                     </Link>
+                    <div className='mx-4 flex items-center space-x-4'>
+                        <Link href='/login' className='hover:opacity-70'>
+                            Login
+                        </Link>
+                        <Link href='/register' className='hover:opacity-70'>
+                            Register
+                        </Link>
+                    </div>
                 </div>
 
                 <div className='hidden lg:block'>
