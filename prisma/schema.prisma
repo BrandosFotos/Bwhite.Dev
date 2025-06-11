@@ -13,6 +13,25 @@ datasource db {
   url      = env("DATABASE_URL")
 }
 
+model MinecraftApplication {
+  id          Int      @id @default(autoincrement())
+  username    String   @unique
+  email       String
+  discord     String
+  reason      String   @db.Text
+  experience  String   @db.Text
+  status      Status   @default(PENDING)
+  createdAt   DateTime @default(now())
+  updatedAt   DateTime @updatedAt
+
+  @@map("minecraft_applications")
+}
+
+enum Status {
+  PENDING
+  APPROVED
+  REJECTED
+}
 
 model User {
   id        Int @id @default(autoincrement())

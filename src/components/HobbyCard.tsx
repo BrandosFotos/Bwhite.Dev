@@ -467,7 +467,11 @@ const HobbyCard: React.FC = () => {
 
     const handleBallClick = (ball: CircleState) => {
         if (!isDragEventRef.current) {
-            setActiveHobby(ball);
+            if (ball.label === 'Gaming') {
+                window.open('https://bwhite.dev/mc', '_blank');
+            } else {
+                setActiveHobby(ball);
+            }
         }
         // isDragEventRef will be reset on the next mousedown/touchstart
     };
