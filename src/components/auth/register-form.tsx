@@ -50,50 +50,70 @@ export default function RegisterForm() {
     }
 
     return (
-        <form onSubmit={onSubmit} className='space-y-4'>
-            <div className='space-y-2'>
-                <label htmlFor='name' className='text-sm leading-none font-medium'>
-                    Name
-                </label>
-                <input
-                    id='name'
-                    name='name'
-                    type='text'
-                    placeholder='John Doe'
-                    required
-                    className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm'
-                />
+        <form onSubmit={onSubmit} className='mt-8 space-y-6'>
+            <div className='space-y-4'>
+                <div>
+                    <label htmlFor='name' className='block text-sm font-medium text-gray-700'>
+                        Name
+                    </label>
+                    <div className='mt-1'>
+                        <input
+                            id='name'
+                            name='name'
+                            type='text'
+                            autoComplete='name'
+                            required
+                            placeholder='John Doe'
+                            className='block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none sm:text-sm'
+                            disabled={loading}
+                        />
+                    </div>
+                </div>
+                <div>
+                    <label htmlFor='email' className='block text-sm font-medium text-gray-700'>
+                        Email
+                    </label>
+                    <div className='mt-1'>
+                        <input
+                            id='email'
+                            name='email'
+                            type='email'
+                            autoComplete='email'
+                            required
+                            placeholder='name@example.com'
+                            className='block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none sm:text-sm'
+                            disabled={loading}
+                        />
+                    </div>
+                </div>
+                <div>
+                    <label htmlFor='password' className='block text-sm font-medium text-gray-700'>
+                        Password
+                    </label>
+                    <div className='mt-1'>
+                        <input
+                            id='password'
+                            name='password'
+                            type='password'
+                            autoComplete='new-password'
+                            required
+                            className='block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none sm:text-sm'
+                            disabled={loading}
+                        />
+                    </div>
+                </div>
             </div>
-            <div className='space-y-2'>
-                <label htmlFor='email' className='text-sm leading-none font-medium'>
-                    Email
-                </label>
-                <input
-                    id='email'
-                    name='email'
-                    type='email'
-                    placeholder='name@example.com'
-                    required
-                    className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm'
-                />
-            </div>
-            <div className='space-y-2'>
-                <label htmlFor='password' className='text-sm leading-none font-medium'>
-                    Password
-                </label>
-                <input
-                    id='password'
-                    name='password'
-                    type='password'
-                    required
-                    className='w-full rounded-md border border-gray-300 px-3 py-2 text-sm'
-                />
-            </div>
-            {error && <div className='text-sm text-red-500'>{error}</div>}
+
+            {error && (
+                <div className='rounded-md bg-red-50 p-4'>
+                    <div className='text-sm text-red-700'>{error}</div>
+                </div>
+            )}
+
             <button
                 type='submit'
                 disabled={loading}
-                className='w-full rounded-md bg-black px-4 py-2 text-sm font-medium text-white hover:bg-gray-800 disabled:opacity-50'>
+                className='flex w-full justify-center rounded-lg border border-transparent bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50'>
                 {loading ? 'Creating account...' : 'Create Account'}
             </button>
         </form>
