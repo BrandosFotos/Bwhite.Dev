@@ -52,7 +52,10 @@ export function UploadActions({
 
     return (
         <div className='flex gap-2'>
-            <a href={filePath} className='rounded bg-blue-500 px-2 py-1 text-white hover:bg-blue-600' download>
+            <a
+                href={`/api/uploads/${id}`}
+                className='rounded bg-blue-500 px-2 py-1 text-white hover:bg-blue-600'
+                download>
                 Download
             </a>
             <button

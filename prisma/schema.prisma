@@ -73,6 +73,7 @@ model Uploads {
   userId    Int
   fileName  String
   filePath  String
+  fileData  Bytes
   createdAt DateTime @default(now())
   user      User     @relation(fields: [userId], references: [id])
 }

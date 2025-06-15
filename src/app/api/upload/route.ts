@@ -3,9 +3,7 @@ import { NextRequest, NextResponse } from 'next/server';
 import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/db';
 
-import { writeFile } from 'fs/promises';
 import { getServerSession } from 'next-auth';
-import { join } from 'path';
 
 export async function POST(request: NextRequest) {
     try {
@@ -25,18 +23,12 @@ export async function POST(request: NextRequest) {
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 
-        // Save file to disk
-        const uploadsDir = join(process.cwd(), 'public', 'uploads');
-        const fileName = `${Date.now()}-${file.name}`;
-        const filePath = join(uploadsDir, fileName);
-
-        await writeFile(filePath, buffer);
-
-        // Save file info to database
+        // Save file info and data to database
         const upload = await db.uploads.create({
             data: {
                 fileName: file.name,
-                filePath: `/uploads/${fileName}`,
+                filePath: `/uploads/${Date.now()}-${file.name}`, // Keep this for reference
+                fileData: buffer, // Store the actual file data
                 userId: parseInt(session.user.id)
             }
         });
