@@ -1,11 +1,15 @@
 import { useEffect, useState } from 'react';
 
+import Link from 'next/link';
+
 import { AnimatePresence, motion } from 'framer-motion';
 import { Menu, X } from 'lucide-react';
+import { signOut, useSession } from 'next-auth/react';
 
 export default function ScrollNavbar() {
     const [showNavbar, setShowNavbar] = useState(false);
     const [isMenuOpen, setMenuOpen] = useState(false);
+    const { data: session } = useSession();
 
     useEffect(() => {
         const handleScroll = () => {
@@ -35,11 +39,29 @@ export default function ScrollNavbar() {
 
                             <div className='absolute top-1/2 left-1/2 hidden -translate-x-1/2 -translate-y-1/2 sm:block'>
                                 <ul className='flex items-center space-x-6 text-sm font-medium text-neutral-700'>
-                                    <li className='cursor-pointer transition hover:text-black'>Home</li>
+                                    <li className='cursor-pointer transition hover:text-black'>
+                                        <Link href='/about'>About</Link>
+                                    </li>
                                     <span className='text-neutral-300'>|</span>
-                                    <li className='cursor-pointer transition hover:text-black'>About</li>
+                                    <li className='cursor-pointer transition hover:text-black'>
+                                        <Link href='/contact'>Contact</Link>
+                                    </li>
                                     <span className='text-neutral-300'>|</span>
-                                    <li className='cursor-pointer transition hover:text-black'>Contact</li>
+                                    <li className='cursor-pointer transition hover:text-black'>
+                                        <Link href='/login'>Login</Link>
+                                    </li>
+                                    {session?.user?.isAdmin && (
+                                        <>
+                                            <span className='text-neutral-300 dark:text-neutral-700'>|</span>
+                                            <li>
+                                                <Link
+                                                    href='/admin'
+                                                    className='cursor-pointer text-blue-600 transition hover:opacity-70'>
+                                                    Admin Dashboard
+                                                </Link>
+                                            </li>
+                                        </>
+                                    )}
                                 </ul>
                             </div>
 
