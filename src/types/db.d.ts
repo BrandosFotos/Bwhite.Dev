@@ -13,5 +13,6 @@ declare global {
             name: string | null;
             email: string;
         };
+        packVersion: string | null;
     };
 }

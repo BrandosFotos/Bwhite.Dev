@@ -69,13 +69,14 @@ model User {
 }
 
 model Uploads {
-  id        Int      @id @default(autoincrement())
-  userId    Int
-  fileName  String
-  filePath  String
-  fileData  Bytes
-  createdAt DateTime @default(now())
-  user      User     @relation(fields: [userId], references: [id])
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  fileName    String
+  filePath    String
+  fileData    Bytes
+  packVersion String?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
 }
 
 enum Status {

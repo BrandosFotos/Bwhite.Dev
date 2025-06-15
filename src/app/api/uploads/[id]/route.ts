@@ -1,11 +1,11 @@
 import { NextRequest, NextResponse } from 'next/server';
 
 import { authOptions } from '@/lib/auth';
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 import { getServerSession } from 'next-auth';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: { params: { id: string } }) {
     try {
         const session = await getServerSession(authOptions);
 
@@ -13,8 +13,8 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
-        const upload = await db.uploads.findUnique({
-            where: { id: parseInt(params.id) }
+        const upload = await prisma.uploads.findUnique({
+            where: { id: parseInt(context.params.id) }
         });
 
         if (!upload) {

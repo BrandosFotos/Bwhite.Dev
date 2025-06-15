@@ -1,10 +1,11 @@
 import { redirect } from 'next/navigation';
 
 import { authOptions } from '@/lib/auth';
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 import { deleteUpload, toggleAdminStatus, updateApplicationStatus } from './actions';
 import { AdminToggle, UploadActions, WhitelistActions } from './components/AdminActions';
+import { UploadForm } from './components/UploadForm';
 import { getServerSession } from 'next-auth';
 
 export default async function AdminDashboard() {
@@ -15,17 +16,17 @@ export default async function AdminDashboard() {
     }
 
     // Fetch admin data
-    const users = (await db.user.findMany({
+    const users = (await prisma.user.findMany({
         include: {
             uploads: true
         }
     })) as UserWithAdmin[];
 
-    const whitelistApplications = (await db.minecraftApplication.findMany({
+    const whitelistApplications = (await prisma.minecraftApplication.findMany({
         orderBy: { createdAt: 'desc' }
     })) as MinecraftApplicationWithStatus[];
 
-    const uploads = (await db.uploads.findMany({
+    const uploads = (await prisma.uploads.findMany({
         include: {
             user: {
                 select: {
@@ -117,18 +118,14 @@ export default async function AdminDashboard() {
             <div className='rounded-lg bg-white p-6 shadow'>
                 <h2 className='mb-4 text-2xl font-semibold'>File Management</h2>
                 <div className='mb-4'>
-                    <form action='/api/upload' method='post' encType='multipart/form-data' className='flex gap-4'>
-                        <input type='file' name='file' className='flex-1 rounded border p-2' required />
-                        <button type='submit' className='rounded bg-blue-500 px-4 py-2 text-white hover:bg-blue-600'>
-                            Upload
-                        </button>
-                    </form>
+                    <UploadForm />
                 </div>
                 <div className='overflow-x-auto'>
                     <table className='w-full'>
                         <thead>
                             <tr className='border-b'>
                                 <th className='p-2 text-left'>File Name</th>
+                                <th className='p-2 text-left'>Pack Version</th>
                                 <th className='p-2 text-left'>Uploaded By</th>
                                 <th className='p-2 text-left'>Date</th>
                                 <th className='p-2 text-left'>Actions</th>
@@ -138,6 +135,7 @@ export default async function AdminDashboard() {
                             {uploads.map((upload) => (
                                 <tr key={upload.id} className='border-b hover:bg-gray-50'>
                                     <td className='p-2'>{upload.fileName}</td>
+                                    <td className='p-2'>{upload.packVersion}</td>
                                     <td className='p-2'>{upload.user.name || upload.user.email}</td>
                                     <td className='p-2'>{new Date(upload.createdAt).toLocaleDateString()}</td>
                                     <td className='p-2'>
