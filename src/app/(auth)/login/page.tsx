@@ -1,3 +1,5 @@
+import { Suspense } from 'react';
+
 import { Metadata } from 'next';
 import Link from 'next/link';
 
@@ -16,7 +18,9 @@ export default function LoginPage() {
                     <h1 className='text-3xl font-bold text-gray-900'>Welcome back</h1>
                     <p className='mt-2 text-sm text-gray-600'>Enter your email to sign in to your account</p>
                 </div>
-                <LoginForm />
+                <Suspense fallback={<div>Loading...</div>}>
+                    <LoginForm />
+                </Suspense>
                 <p className='text-center text-sm text-gray-600'>
                     <Link
                         href='/register'

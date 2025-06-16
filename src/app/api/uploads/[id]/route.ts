@@ -5,7 +5,7 @@ import { prisma } from '@/lib/prisma';
 
 import { getServerSession } from 'next-auth';
 
-export async function GET(request: NextRequest, context: { params: { id: string } }) {
+export async function GET(request: NextRequest) {
     try {
         const session = await getServerSession(authOptions);
 
@@ -13,15 +13,19 @@ export async function GET(request: NextRequest, context: { params: { id: string 
             return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
         }
 
+        const id = request.nextUrl.pathname.split('/').pop();
+        if (!id) {
+            return NextResponse.json({ error: 'Missing file ID' }, { status: 400 });
+        }
+
         const upload = await prisma.uploads.findUnique({
-            where: { id: parseInt(context.params.id) }
+            where: { id: parseInt(id) }
         });
 
         if (!upload) {
             return NextResponse.json({ error: 'File not found' }, { status: 404 });
         }
 
-        // Return the file data with appropriate headers
         return new NextResponse(upload.fileData, {
             headers: {
                 'Content-Type': 'application/octet-stream',
