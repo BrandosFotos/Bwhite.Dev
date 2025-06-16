@@ -2,10 +2,13 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { authOptions } from '@/lib/auth';
 import { db } from '@/lib/db';
+import { getRouteParam } from '@/lib/utils';
 
 import { getServerSession } from 'next-auth';
 
-export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
+export async function PATCH(request: NextRequest): Promise<NextResponse> {
+    const id = getRouteParam(request);
+
     try {
         const session = await getServerSession(authOptions);
 
@@ -20,7 +23,7 @@ export async function PATCH(request: NextRequest, { params }: { params: { id: st
         }
 
         const application = await db.minecraftApplication.update({
-            where: { id: parseInt(params.id) },
+            where: { id: parseInt(id) },
             data: { status }
         });
 

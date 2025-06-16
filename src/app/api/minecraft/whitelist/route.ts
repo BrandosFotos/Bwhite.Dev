@@ -13,7 +13,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Check if username already applied
-        const existingApplication = await prisma.MinecraftApplication.findUnique({
+        const existingApplication = await prisma.minecraftApplication.findUnique({
             where: { username }
         });
 
@@ -22,7 +22,7 @@ export async function POST(request: NextRequest) {
         }
 
         // Create new application
-        const application = await prisma.MinecraftApplication.create({
+        const application = await prisma.minecraftApplication.create({
             data: {
                 username,
                 email,
@@ -41,7 +41,7 @@ export async function POST(request: NextRequest) {
 
 export async function GET() {
     try {
-        const applications = await prisma.MinecraftApplication.findMany({
+        const applications = await prisma.minecraftApplication.findMany({
             orderBy: { createdAt: 'desc' }
         });
 
