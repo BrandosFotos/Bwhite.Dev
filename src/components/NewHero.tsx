@@ -2,13 +2,35 @@ import React from 'react';
 
 import { motion } from 'framer-motion';
 
+const ScrollArrow = () => {
+    return (
+        <motion.div
+            className='absolute bottom-24 left-1/2 -translate-x-1/2'
+            initial={{ opacity: 0, y: 20 }}
+            animate={{ opacity: 1, y: 0 }}
+            transition={{ delay: 2, duration: 0.5 }}>
+            <motion.div
+                className='h-6 w-6 rotate-45 border-r-2 border-b-2 border-white/60'
+                animate={{
+                    y: [0, 10, 0]
+                }}
+                transition={{
+                    duration: 1.5,
+                    repeat: Infinity,
+                    ease: 'easeInOut'
+                }}
+            />
+        </motion.div>
+    );
+};
+
 export default function Hero() {
     return (
         <div
-            className='flex min-h-[60vh] flex-col items-center justify-center px-4 text-center'
+            className='relative -mt-[15px] flex h-screen flex-col items-center justify-center px-4 text-center'
             style={{ fontFamily: 'var(--font-sf-pro)' }}>
             <motion.h1
-                className='mb-6 text-5xl font-bold tracking-tight md:text-7xl'
+                className='mb-36 text-6xl font-bold tracking-tight md:text-8xl'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}>
@@ -34,11 +56,9 @@ export default function Hero() {
                 </motion.span>{' '}
                 engineer
             </motion.h1>
-            <motion.p
-                className='max-w-2xl text-xl font-normal tracking-wide text-gray-300 md:text-2xl'
-                initial={{ opacity: 0, y: 20 }}
-                animate={{ opacity: 1, y: 0 }}
-                transition={{ duration: 0.8, delay: 0.2 }}></motion.p>
+
+            {/* Scroll arrow component */}
+            <ScrollArrow />
         </div>
     );
 }

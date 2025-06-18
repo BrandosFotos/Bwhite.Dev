@@ -16,12 +16,12 @@ export default function Home() {
             style={{ fontFamily: 'var(--font-sf-pro)' }}>
             <main>
                 <Hero />
-                <Education />
-                <Experience />
+                {/* <Education /> */}
+                {/* <Experience /> */}
                 {/* <HobbyCard /> */}
                 {/* <SearchForm /> */}
-                <ProjectsCarousel />
-                <ContactForm />
+                {/* <ProjectsCarousel /> */}
+                {/* <ContactForm /> */}
             </main>
             <Footer />
         </div>
