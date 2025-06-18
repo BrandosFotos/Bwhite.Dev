@@ -2,8 +2,6 @@ import React from 'react';
 
 import Image from 'next/image';
 
-import ThemeSwitcher from '@/components/ui/ThemeSwitch';
-
 const Footer: React.FC = () => {
     return (
         <footer className='row-start-3 flex flex-wrap items-center justify-center gap-6'>
@@ -31,7 +29,6 @@ const Footer: React.FC = () => {
                 <Image aria-hidden src='/globe.svg' alt='Globe icon' width={16} height={16} />
                 Support me on GitHub
             </a>
-            <ThemeSwitcher />
         </footer>
     );
 };
