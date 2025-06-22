@@ -17,6 +17,7 @@
     },
     "dependencies": {
         "@auth/prisma-adapter": "^2.9.1",
+        "@heroicons/react": "^2.2.0",
         "@heroui/chip": "^2.2.12",
         "@heroui/navbar": "^2.2.17",
         "@heroui/react": "^2.7.8",
