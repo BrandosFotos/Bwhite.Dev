@@ -4,9 +4,7 @@ import React, { useEffect, useState } from 'react';
 
 import Image from 'next/image';
 
-
 import { VersionsSection } from './components/VersionsSection';
-
 import { motion } from 'framer-motion';
 
 interface Version {
@@ -15,7 +13,6 @@ interface Version {
     packVersion: string;
     createdAt: string;
 }
-
 
 type ActiveTab = 'server' | 'whitelist' | 'gallery' | 'mods';
 
@@ -37,7 +34,22 @@ function AccordionItem({ title, children }: { title: string; children: React.Rea
                 className='overflow-hidden border-t-2 border-[#4a4a4a]'>
                 <div className='p-4'>{children}</div>
             </motion.div>
+        </div>
+    );
+}
 
+export default function MinecraftPage() {
+    const [formData, setFormData] = useState({
+        username: '',
+        email: '',
+        discord: '',
+        reason: '',
+        experience: ''
+    });
+    const [status, setStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
+    const [errorMessage, setErrorMessage] = useState('');
+    const [versions, setVersions] = useState<Version[]>([]);
+    const [activeTab, setActiveTab] = useState<ActiveTab>('server');
 
     useEffect(() => {
         fetch('/api/uploads')
@@ -88,7 +100,6 @@ function AccordionItem({ title, children }: { title: string; children: React.Rea
         }));
     };
 
-
     return (
         <div className='min-h-screen bg-[#1a1a1a]'>
             <motion.div
@@ -107,7 +118,6 @@ function AccordionItem({ title, children }: { title: string; children: React.Rea
                     }}>
                     Minecraft Server
                 </motion.h1>
-
 
                 <p className='mb-8 text-lg text-[#ffffff]'>Welcome!</p>
 
@@ -206,8 +216,6 @@ function AccordionItem({ title, children }: { title: string; children: React.Rea
                                 </li>
                                 <li>
                                     <div className='font-semibold text-[#ffffff]'>Import the Modpack</div>
-
-               
                                     <div>
                                         Click "Create Custom Profile" → "Import" (top right) and select the .zip you
                                         downloaded.
@@ -230,7 +238,7 @@ function AccordionItem({ title, children }: { title: string; children: React.Rea
                             </div>
                         </AccordionItem>
                     </div>
-
+                )}
 
                 {activeTab === 'whitelist' && (
                     <motion.div
@@ -456,21 +464,6 @@ function AccordionItem({ title, children }: { title: string; children: React.Rea
                     </motion.div>
                 )}
             </motion.div>
-
-            {/* Mod List Modal */}
-            {showModsModal && (
-                <div className='fixed inset-0 z-50 flex items-center justify-center bg-black/60 backdrop-blur-sm'>
-                    <div className='relative mx-4 w-full max-w-2xl rounded-lg bg-[#232a32] p-6 shadow-2xl'>
-                        <button
-                            onClick={() => setShowModsModal(false)}
-                            className='absolute top-3 right-3 text-[#55ff55] hover:text-[#44dd44] focus:outline-none'>
-                            <XMarkIcon className='h-6 w-6' />
-                        </button>
-                        <h2 className='mb-4 text-center text-2xl font-semibold text-[#55ff55]'>Full Mod List</h2>
-                        <ModsListModal />
-                    </div>
-                </div>
-            )}
         </div>
     );
 }
