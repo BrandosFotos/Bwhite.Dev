@@ -69,7 +69,7 @@ export default async function AdminDashboard() {
             </div>
 
             {/* Whitelist Applications */}
-            <div className='rounded-lg bg-white p-6 shadow'>
+            <div className='rounded-lg bg-gray-800 p-6 shadow'>
                 <h2 className='mb-4 text-2xl font-semibold'>Whitelist Applications</h2>
                 <div className='overflow-x-auto'>
                     <table className='w-full'>
@@ -115,7 +115,7 @@ export default async function AdminDashboard() {
             </div>
 
             {/* File Management */}
-            <div className='rounded-lg bg-white p-6 shadow'>
+            <div className='rounded-lg bg-gray-800 p-6 shadow'>
                 <h2 className='mb-4 text-2xl font-semibold'>File Management</h2>
                 <div className='mb-4'>
                     <UploadForm />
@@ -153,7 +153,7 @@ export default async function AdminDashboard() {
             </div>
 
             {/* User Management */}
-            <div className='rounded-lg bg-white p-6 shadow'>
+            <div className='rounded-lg bg-gray-800 p-6 shadow'>
                 <h2 className='mb-4 text-2xl font-semibold'>User Management</h2>
                 <div className='overflow-x-auto'>
                     <table className='w-full'>
