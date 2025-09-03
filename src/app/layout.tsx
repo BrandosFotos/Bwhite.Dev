@@ -1,41 +1,41 @@
-import type { ReactNode } from 'react';
-
 import type { Metadata } from 'next';
+import { Inter } from 'next/font/google';
 import localFont from 'next/font/local';
 
-import { ThemeProvider } from 'next-themes';
+import './globals.css';
 
-import '@/app/globals.css';
-import { Providers } from '@/components/providers';
+const sfPro = localFont({
+    src: [
+        {
+            path: '../../public/fonts/SF-Pro-Display-Regular.otf',
+            weight: '400',
+            style: 'normal'
+        },
+        {
+            path: '../../public/fonts/SF-Pro-Display-Medium.otf',
+            weight: '500',
+            style: 'normal'
+        },
+        {
+            path: '../../public/fonts/SF-Pro-Display-Bold.otf',
+            weight: '700',
+            style: 'normal'
+        }
+    ],
+    variable: '--font-sf-pro'
+});
 
-const geistSans = localFont({
-    src: './fonts/GeistVF.woff',
-    variable: '--font-geist-sans',
-    weight: '100 900'
-});
-const geistMono = localFont({
-    src: './fonts/GeistMonoVF.woff',
-    variable: '--font-geist-mono',
-    weight: '100 900'
-});
+const inter = Inter({ subsets: ['latin'] });
 
 export const metadata: Metadata = {
-    title: 'Bwhite.Dev',
-    description: 'Personal Portfolio of Bwhite.Dev'
+    title: 'Brandon White',
+    description: 'Full Stack Developer'
 };
 
-const Layout = ({ children }: Readonly<{ children: ReactNode }>) => {
+export default function RootLayout({ children }: { children: React.ReactNode }) {
     return (
-        // ? https://github.com/pacocoursey/next-themes?tab=readme-ov-file#with-app
-        // ? https://react.dev/reference/react-dom/client/hydrateRoot#suppressing-unavoidable-hydration-mismatch-errors
-        <html suppressHydrationWarning lang='en'>
-            <body className={`${geistSans.variable} ${geistMono.variable} bg-background text-foreground antialiased`}>
-                <Providers>
-                    <ThemeProvider attribute='class'>{children}</ThemeProvider>
-                </Providers>
-            </body>
+        <html lang='en' className={`${sfPro.variable}`}>
+            <body className={`${inter.className} font-sans`}>{children}</body>
         </html>
     );
-};
-
-export default Layout;
+}
