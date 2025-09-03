@@ -17,7 +17,9 @@ export async function GET(request: NextRequest) {
             return NextResponse.json({ error: 'File not found' }, { status: 404 });
         }
 
-        return new NextResponse(upload.fileData, {
+        const fileBuffer = Buffer.from(upload.fileData);
+
+        return new NextResponse(fileBuffer, {
             headers: {
                 'Content-Type': 'application/octet-stream',
                 'Content-Disposition': `attachment; filename="${upload.fileName}"`
