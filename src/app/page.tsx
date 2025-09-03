@@ -4,10 +4,13 @@ import { useRef } from 'react';
 
 import Education from '@/components/Education';
 import Experience from '@/components/ExperienceCard';
+import CircleCard from '@/components/GrowingCircleCard';
 import Hero from '@/components/NewHero';
 import ProjectsCarousel from '@/components/ProjectsCarousel/ProjectsCarousel';
+import ProjectsQuickLinks from '@/components/ProjectsQuickLinks';
 import ContactForm from '@/components/ui/ContactForm/contactform';
 import Footer from '@/components/ui/Footer';
+import Direction from '@/components/ui/direction';
 
 export default function Home() {
     return (
@@ -16,12 +19,19 @@ export default function Home() {
             style={{ fontFamily: 'var(--font-sf-pro)' }}>
             <main>
                 <Hero />
+                <div style={{ minHeight: '30vh', position: 'relative', overflow: 'hidden' }}>
+                    <Direction />
+                </div>
+                <div className='mt-10'>
+                    <ProjectsQuickLinks />
+                </div>
                 {/* <Education /> */}
                 {/* <Experience /> */}
                 {/* <HobbyCard /> */}
                 {/* <SearchForm /> */}
                 {/* <ProjectsCarousel /> */}
                 {/* <ContactForm /> */}
+                {/* <CircleCard /> */}
             </main>
             <Footer />
         </div>

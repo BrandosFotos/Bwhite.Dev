@@ -1,0 +1,10 @@
+<svg width="60" height="40" viewBox="0 0 60 40" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- Bow -->
+  <path d="M10 35 Q30 20 10 5" stroke="#8B5C2A" stroke-width="3" fill="none"/>
+  <!-- Arrow shaft -->
+  <line x1="10" y1="20" x2="50" y2="20" stroke="#444" stroke-width="2"/>
+  <!-- Arrow head -->
+  <polygon points="50,20 45,17 45,23" fill="#444"/>
+  <!-- Arrow fletching -->
+  <polygon points="10,20 13,18 13,22" fill="#888"/>
+</svg> 
