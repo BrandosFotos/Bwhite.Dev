@@ -1,82 +1,31 @@
 @import 'tailwindcss';
 
-/* /Bwhite.Dev/app/global.css */
-
-/* Default Light Theme */
+/* Default Dark Theme */
 :root {
-    --background: #ffffff;
-    --foreground: #171717;
-    --secondary-background: #b1b1b1; /* Secondary background for light theme */
+    --background: #171717;
+    --foreground: #ffffff;
     --font-sans: 'GeistSans', sans-serif;
     --font-mono: 'GeistMono', monospace;
+    --accent-color: #171717;
+    --theme-bg-gradient: #171717;
+}
+
+/* Light Theme */
+[data-theme='light'] {
+    --background: #ffffff;
+    --foreground: #171717;
     --accent-color: rgb(223, 223, 223);
     --theme-bg-gradient: linear-gradient(135deg, #defcfe, #f3e5ff, #f7d6d6, #ffd7b1, #f3d59e);
-}
-
-/* Ocean Theme - Cool Tones */
-[data-theme='ocean'] {
-    --background: #1e3053;
-    --foreground: #618bff;
-    --secondary-background: #a5750398;
-    --text-color: #ffffff;
-    --accent-color: #176d72;
-    --theme-bg-gradient: linear-gradient(135deg, #e9f6f9, #e3f3fb, #93d5ff, #d4dffa, #e6e9f7);
-}
-
-/* Pink Theme - Warm Rose */
-[data-theme='pink'] {
-    --background: hsl(308, 72%, 90%);
-    --foreground: #363636;
-    --secondary-background: #effdba; /* Yellow-gold, complementary to blue */
-    --accent-color: white;
-    --theme-bg-gradient: linear-gradient(135deg, #ffe6f1, #ffd4e6, #f5d1fd, #ffbcdb, #ffc6b6);
-}
-
-/* Custom Dark Theme - Midnight */
-[data-theme='dark'] {
-    --background: #000000;
-    --foreground: #ffffff;
-    --secondary-background: #333333; /* White, complementary to black */
-    --accent-color: rgb(36, 36, 36);
-    --theme-bg-gradient: linear-gradient(135deg, #2c2c2c, #252525, #1e1e1e, #171717, #101010);
-}
-
-/* Forest Theme - Natural Tones */
-[data-theme='forest'] {
-    --background: #2e422d;
-    --foreground: #667100;
-    --secondary-background: #cf5f3c; /* A reddish-orange, complementary to green */
-    --accent-color: #237a57;
-    --theme-bg-gradient: linear-gradient(135deg, #f0fbe1, #c7e6b8, #e6ffe0, #cdfcc7, #e9ffe8);
-}
-
-/* System Theme - Neutral */
-[data-theme='system'] {
-    --background: #ffffff; /* Will adapt to system light/dark */
-    --foreground: #171717;
-    --secondary-background: #171717; /* Default to black as secondary for light */
-    --accent-color: white;
-    --theme-bg-gradient: linear-gradient(135deg, #f8f9fa, #e9ecef, #dee2e6, #ced4da, #adb5bd);
 }
 
 /* Custom Body Styles */
 body {
     color: var(--foreground);
-    background: var(--theme-bg-gradient); /* ✅ use the gradient */
+    background: var(--theme-bg-gradient);
     font-family: var(--font-sans), Arial, Helvetica, sans-serif;
     transition:
         background 0.3s ease,
         color 0.3s ease;
-}
-
-/* Example usage of secondary background */
-.secondary-background {
-    background-color: var(--secondary-background);
-}
-
-/* Use secondary background where necessary */
-.forground-background {
-    background-color: var(--foreground);
 }
 
 .accent-color {
