@@ -4,11 +4,8 @@ import { useRef } from 'react';
 
 import Education from '@/components/Education';
 import Experience from '@/components/ExperienceCard';
-import CircleCard from '@/components/GrowingCircleCard';
 import Hero from '@/components/NewHero';
-import ProjectsCarousel from '@/components/ProjectsCarousel/ProjectsCarousel';
 import ProjectsQuickLinks from '@/components/ProjectsQuickLinks';
-import ContactForm from '@/components/ui/ContactForm/contactform';
 import Footer from '@/components/ui/Footer';
 import Direction from '@/components/ui/direction';
 
