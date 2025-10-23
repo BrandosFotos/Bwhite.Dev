@@ -74,9 +74,9 @@ model Uploads {
   userId      Int
   fileName    String
   filePath    String
+  createdAt   DateTime @default(now())
   fileData    Bytes
   packVersion String?
-  createdAt   DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
 }
 

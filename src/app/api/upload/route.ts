@@ -25,6 +25,11 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Pack version is required' }, { status: 400 });
         }
 
+        // Validate file size (max 50MB)
+        if (file.size > 50 * 1024 * 1024) {
+            return NextResponse.json({ error: 'File size must be less than 50MB' }, { status: 400 });
+        }
+
         const bytes = await file.arrayBuffer();
         const buffer = Buffer.from(bytes);
 

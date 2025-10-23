@@ -1,37 +1,33 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
-
-import { getServerSession } from 'next-auth';
 
 export async function POST(request: NextRequest) {
     try {
-        const session = await getServerSession(authOptions);
+        const data = await request.formData();
+        const file: File | null = data.get('file') as unknown as File;
+        const title = data.get('title') as string;
+        const description = data.get('description') as string;
+        const username = data.get('username') as string;
 
-        if (!session?.user) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
+        if (!file) {
+            return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
         }
 
-        // Check if user has an approved Minecraft application
+        if (!username) {
+            return NextResponse.json({ error: 'Username is required' }, { status: 400 });
+        }
+
+        // Check if username has an approved Minecraft application
         const minecraftApp = await prisma.minecraftApplication.findFirst({
             where: {
-                email: session.user.email,
+                username: username,
                 status: 'APPROVED'
             }
         });
 
         if (!minecraftApp) {
-            return NextResponse.json({ error: 'You must be whitelisted to upload gallery images' }, { status: 403 });
-        }
-
-        const data = await request.formData();
-        const file: File | null = data.get('file') as unknown as File;
-        const title = data.get('title') as string;
-        const description = data.get('description') as string;
-
-        if (!file) {
-            return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
+            return NextResponse.json({ error: 'Username not found or not whitelisted' }, { status: 403 });
         }
 
         // Validate file type
@@ -39,9 +35,9 @@ export async function POST(request: NextRequest) {
             return NextResponse.json({ error: 'Only image files are allowed' }, { status: 400 });
         }
 
-        // Validate file size (max 10MB)
-        if (file.size > 10 * 1024 * 1024) {
-            return NextResponse.json({ error: 'File size must be less than 10MB' }, { status: 400 });
+        // Validate file size (max 50MB)
+        if (file.size > 50 * 1024 * 1024) {
+            return NextResponse.json({ error: 'File size must be less than 50MB' }, { status: 400 });
         }
 
         const bytes = await file.arrayBuffer();
@@ -55,12 +51,14 @@ export async function POST(request: NextRequest) {
                 fileData: buffer,
                 title: title || null,
                 description: description || null,
-                minecraftUsername: minecraftApp.username,
-                userId: parseInt(session.user.id)
+                minecraftUsername: username,
+                userId: 1 // Default user ID since we're not using session-based auth
             }
         });
 
-        return NextResponse.json(galleryImage);
+        // Return gallery image without binary data to avoid JSON serialization issues
+        const { fileData, ...galleryImageResponse } = galleryImage;
+        return NextResponse.json(galleryImageResponse);
     } catch (error) {
         console.error('Gallery upload error:', error);
         return NextResponse.json({ error: 'Error uploading image' }, { status: 500 });
@@ -71,7 +69,14 @@ export async function GET() {
     try {
         const galleryImages = await prisma.galleryImage.findMany({
             orderBy: { createdAt: 'desc' },
-            include: {
+            select: {
+                id: true,
+                fileName: true,
+                filePath: true,
+                title: true,
+                description: true,
+                minecraftUsername: true,
+                createdAt: true,
                 user: {
                     select: {
                         name: true,

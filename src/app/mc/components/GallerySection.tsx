@@ -5,7 +5,6 @@ import React, { useState } from 'react';
 import Image from 'next/image';
 
 import { motion } from 'framer-motion';
-import { useSession } from 'next-auth/react';
 
 interface GalleryImage {
     id: number;
@@ -27,9 +26,9 @@ interface GallerySectionProps {
 }
 
 export function GallerySection({ images, isWhitelisted, onImageUpload }: GallerySectionProps) {
-    const { data: session } = useSession();
     const [showUploadForm, setShowUploadForm] = useState(false);
     const [uploadForm, setUploadForm] = useState({
+        username: '',
         title: '',
         description: '',
         file: null as File | null
@@ -37,6 +36,7 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
     const [uploadStatus, setUploadStatus] = useState<'idle' | 'loading' | 'success' | 'error'>('idle');
     const [errorMessage, setErrorMessage] = useState('');
     const [selectedImage, setSelectedImage] = useState<GalleryImage | null>(null);
+    const [usernameVerified, setUsernameVerified] = useState(false);
 
     const handleFileChange = (e: React.ChangeEvent<HTMLInputElement>) => {
         const file = e.target.files?.[0];
@@ -45,9 +45,52 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
         }
     };
 
+    const verifyUsername = async () => {
+        if (!uploadForm.username.trim()) {
+            setErrorMessage('Please enter a username');
+            return;
+        }
+
+        setErrorMessage(''); // Clear any previous errors
+        console.log('Verifying username:', uploadForm.username);
+
+        try {
+            const response = await fetch('/api/minecraft/whitelist');
+            console.log('Response status:', response.status);
+
+            if (!response.ok) {
+                throw new Error(`HTTP error! status: ${response.status}`);
+            }
+
+            const applications = await response.json();
+            console.log('Applications found:', applications.length);
+
+            const userApp = applications.find(
+                (app: any) =>
+                    app.username.toLowerCase() === uploadForm.username.toLowerCase() && app.status === 'APPROVED'
+            );
+
+            console.log('User app found:', userApp);
+
+            if (userApp) {
+                setUsernameVerified(true);
+                setErrorMessage('');
+                console.log('Username verified successfully!');
+            } else {
+                setUsernameVerified(false);
+                setErrorMessage('Username not found or not whitelisted');
+                console.log('Username not found or not approved');
+            }
+        } catch (error) {
+            console.error('Error verifying username:', error);
+            setErrorMessage(`Error verifying username: ${error instanceof Error ? error.message : 'Unknown error'}`);
+            setUsernameVerified(false);
+        }
+    };
+
     const handleUpload = async (e: React.FormEvent) => {
         e.preventDefault();
-        if (!uploadForm.file) return;
+        if (!uploadForm.file || !usernameVerified) return;
 
         setUploadStatus('loading');
         setErrorMessage('');
@@ -57,6 +100,7 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
             formData.append('file', uploadForm.file);
             formData.append('title', uploadForm.title);
             formData.append('description', uploadForm.description);
+            formData.append('username', uploadForm.username);
 
             const response = await fetch('/api/gallery', {
                 method: 'POST',
@@ -70,7 +114,8 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
             }
 
             setUploadStatus('success');
-            setUploadForm({ title: '', description: '', file: null });
+            setUploadForm({ username: '', title: '', description: '', file: null });
+            setUsernameVerified(false);
             setShowUploadForm(false);
             onImageUpload(data);
 
@@ -99,33 +144,13 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
                     Showcase your amazing builds and creations from our server!
                 </p>
 
-                {session?.user && isWhitelisted && (
-                    <motion.button
-                        onClick={() => setShowUploadForm(!showUploadForm)}
-                        className='transform rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 font-bold text-white transition-all duration-300 hover:scale-105 hover:from-purple-600 hover:to-pink-600'
-                        whileHover={{ scale: 1.05 }}
-                        whileTap={{ scale: 0.95 }}>
-                        {showUploadForm ? 'Cancel Upload' : '📸 Upload Image'}
-                    </motion.button>
-                )}
-
-                {session?.user && !isWhitelisted && (
-                    <div className='mx-auto max-w-md rounded-xl border border-yellow-500/30 bg-yellow-500/20 p-4'>
-                        <p className='text-yellow-200'>
-                            <span className='font-semibold'>⚠️ Whitelist Required:</span> You need to be whitelisted to
-                            upload images to the gallery.
-                        </p>
-                    </div>
-                )}
-
-                {!session?.user && (
-                    <div className='mx-auto max-w-md rounded-xl border border-blue-500/30 bg-blue-500/20 p-4'>
-                        <p className='text-blue-200'>
-                            <span className='font-semibold'>🔐 Login Required:</span> Please log in to upload images to
-                            the gallery.
-                        </p>
-                    </div>
-                )}
+                <motion.button
+                    onClick={() => setShowUploadForm(!showUploadForm)}
+                    className='transform rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 font-bold text-white transition-all duration-300 hover:scale-105 hover:from-purple-600 hover:to-pink-600'
+                    whileHover={{ scale: 1.05 }}
+                    whileTap={{ scale: 0.95 }}>
+                    {showUploadForm ? 'Cancel Upload' : '📸 Upload Image'}
+                </motion.button>
             </div>
 
             {/* Upload Form */}
@@ -138,6 +163,30 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
                     <h3 className='mb-4 text-xl font-semibold text-white'>Upload New Image</h3>
                     <form onSubmit={handleUpload} className='space-y-4'>
                         <div>
+                            <label htmlFor='username' className='mb-2 block text-sm font-semibold text-purple-400'>
+                                Minecraft Username *
+                            </label>
+                            <div className='flex gap-2'>
+                                <input
+                                    type='text'
+                                    id='username'
+                                    value={uploadForm.username}
+                                    onChange={(e) => setUploadForm((prev) => ({ ...prev, username: e.target.value }))}
+                                    className='flex-1 rounded-lg border-2 border-gray-600 bg-gray-800/50 p-3 text-white placeholder-gray-400 transition-all focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 focus:outline-none'
+                                    placeholder='Enter your Minecraft username...'
+                                    disabled={usernameVerified}
+                                />
+                                <button
+                                    type='button'
+                                    onClick={verifyUsername}
+                                    disabled={!uploadForm.username.trim() || usernameVerified}
+                                    className='rounded-lg bg-gradient-to-r from-green-500 to-blue-500 px-4 py-3 font-semibold text-white transition-all duration-300 hover:from-green-600 hover:to-blue-600 disabled:cursor-not-allowed disabled:from-gray-600 disabled:to-gray-700'>
+                                    {usernameVerified ? '✅ Verified' : 'Verify'}
+                                </button>
+                            </div>
+                        </div>
+
+                        <div>
                             <label htmlFor='title' className='mb-2 block text-sm font-semibold text-purple-400'>
                                 Image Title
                             </label>
@@ -148,6 +197,7 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
                                 onChange={(e) => setUploadForm((prev) => ({ ...prev, title: e.target.value }))}
                                 className='w-full rounded-lg border-2 border-gray-600 bg-gray-800/50 p-3 text-white placeholder-gray-400 transition-all focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 focus:outline-none'
                                 placeholder='Give your image a title...'
+                                disabled={!usernameVerified}
                             />
                         </div>
 
@@ -162,22 +212,55 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
                                 className='w-full rounded-lg border-2 border-gray-600 bg-gray-800/50 p-3 text-white placeholder-gray-400 transition-all focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 focus:outline-none'
                                 placeholder='Describe your build or creation...'
                                 rows={3}
+                                disabled={!usernameVerified}
                             />
                         </div>
 
                         <div>
                             <label htmlFor='file' className='mb-2 block text-sm font-semibold text-purple-400'>
-                                Select Image
+                                Select Image{' '}
+                                {!usernameVerified && (
+                                    <span className='text-red-400'>(Username must be verified first)</span>
+                                )}
                             </label>
+                            <p className='mb-2 text-xs text-gray-400'>
+                                Maximum file size: 50MB. Supported formats: JPG, PNG, GIF, WebP
+                            </p>
                             <input
                                 type='file'
                                 id='file'
                                 accept='image/*'
                                 onChange={handleFileChange}
-                                className='w-full rounded-lg border-2 border-gray-600 bg-gray-800/50 p-3 text-white transition-all file:mr-4 file:rounded-lg file:border-0 file:bg-purple-500 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-purple-600'
+                                className='w-full rounded-lg border-2 border-gray-600 bg-gray-800/50 p-3 text-white transition-all file:mr-4 file:rounded-lg file:border-0 file:bg-purple-500 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-purple-600 disabled:opacity-50'
                                 required
+                                disabled={!usernameVerified}
+                                title={!usernameVerified ? 'Username must be verified first' : 'Select an image file'}
                             />
+                            {!usernameVerified && (
+                                <p className='mt-2 text-sm text-gray-400'>
+                                    Please verify your Minecraft username above to enable file selection.
+                                </p>
+                            )}
                         </div>
+
+                        {/* Username verification status */}
+                        {uploadForm.username && (
+                            <div
+                                className={`rounded-lg border p-3 ${
+                                    usernameVerified
+                                        ? 'border-green-500/30 bg-green-500/20 text-green-200'
+                                        : 'border-yellow-500/30 bg-yellow-500/20 text-yellow-200'
+                                }`}>
+                                <span className='font-semibold'>
+                                    {usernameVerified ? '✅ Username Verified' : '⚠️ Username Not Verified'}
+                                </span>
+                                {!usernameVerified && (
+                                    <p className='mt-1 text-sm'>
+                                        Enter your Minecraft username and click "Verify" to enable file upload.
+                                    </p>
+                                )}
+                            </div>
+                        )}
 
                         {uploadStatus === 'error' && (
                             <div className='rounded-lg border border-red-500/30 bg-red-500/20 p-3 text-red-200'>
@@ -194,13 +277,18 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
                         <div className='flex gap-4'>
                             <button
                                 type='submit'
-                                disabled={uploadStatus === 'loading' || !uploadForm.file}
+                                disabled={uploadStatus === 'loading' || !uploadForm.file || !usernameVerified}
                                 className='flex-1 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 font-bold text-white transition-all duration-300 hover:from-purple-600 hover:to-pink-600 disabled:cursor-not-allowed disabled:from-gray-600 disabled:to-gray-700'>
                                 {uploadStatus === 'loading' ? 'Uploading...' : 'Upload Image'}
                             </button>
                             <button
                                 type='button'
-                                onClick={() => setShowUploadForm(false)}
+                                onClick={() => {
+                                    setShowUploadForm(false);
+                                    setUploadForm({ username: '', title: '', description: '', file: null });
+                                    setUsernameVerified(false);
+                                    setErrorMessage('');
+                                }}
                                 className='rounded-xl border border-gray-600 px-6 py-3 text-gray-300 transition-all hover:bg-gray-800/50'>
                                 Cancel
                             </button>

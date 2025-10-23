@@ -10,7 +10,6 @@ import { ServerInfo } from './components/ServerInfo';
 import { VersionsSection } from './components/VersionsSection';
 import { WhitelistForm } from './components/WhitelistForm';
 import { motion } from 'framer-motion';
-import { useSession } from 'next-auth/react';
 
 interface Version {
     id: number;
@@ -35,7 +34,6 @@ interface GalleryImage {
 type ActiveTab = 'server' | 'whitelist' | 'gallery';
 
 export default function MinecraftPage() {
-    const { data: session } = useSession();
     const [versions, setVersions] = useState<Version[]>([]);
     const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
     const [activeTab, setActiveTab] = useState<ActiveTab>('server');
@@ -45,28 +43,33 @@ export default function MinecraftPage() {
         // Fetch modpack versions
         fetch('/api/uploads')
             .then((res) => res.json())
-            .then((data) => setVersions(data))
+            .then((data) => {
+                console.log('Versions data received:', data);
+                // Ensure data is an array before setting state
+                if (Array.isArray(data)) {
+                    setVersions(data);
+                } else {
+                    console.error('Versions data is not an array:', data);
+                    setVersions([]);
+                }
+            })
             .catch((error) => console.error('Error fetching versions:', error));
 
         // Fetch gallery images
         fetch('/api/gallery')
             .then((res) => res.json())
-            .then((data) => setGalleryImages(data))
+            .then((data) => {
+                console.log('Gallery data received:', data);
+                // Ensure data is an array before setting state
+                if (Array.isArray(data)) {
+                    setGalleryImages(data);
+                } else {
+                    console.error('Gallery data is not an array:', data);
+                    setGalleryImages([]);
+                }
+            })
             .catch((error) => console.error('Error fetching gallery images:', error));
-
-        // Check if user is whitelisted
-        if (session?.user?.email) {
-            fetch('/api/minecraft/whitelist')
-                .then((res) => res.json())
-                .then((applications) => {
-                    const userApp = applications.find(
-                        (app: any) => app.email === session.user?.email && app.status === 'APPROVED'
-                    );
-                    setIsWhitelisted(!!userApp);
-                })
-                .catch((error) => console.error('Error checking whitelist status:', error));
-        }
-    }, [session]);
+    }, []);
 
     const tabs = [
         { key: 'server' as ActiveTab, label: 'Server Info', icon: '🖥️' },
@@ -135,18 +138,8 @@ export default function MinecraftPage() {
                     {activeTab === 'whitelist' && (
                         <WhitelistForm
                             onSuccess={() => {
-                                // Refresh whitelist status after successful application
-                                if (session?.user?.email) {
-                                    fetch('/api/minecraft/whitelist')
-                                        .then((res) => res.json())
-                                        .then((applications) => {
-                                            const userApp = applications.find(
-                                                (app: any) =>
-                                                    app.email === session.user?.email && app.status === 'APPROVED'
-                                            );
-                                            setIsWhitelisted(!!userApp);
-                                        });
-                                }
+                                // Whitelist application submitted successfully
+                                console.log('Whitelist application submitted');
                             }}
                         />
                     )}
@@ -154,9 +147,13 @@ export default function MinecraftPage() {
                     {activeTab === 'gallery' && (
                         <GallerySection
                             images={galleryImages}
-                            isWhitelisted={isWhitelisted}
+                            isWhitelisted={true}
                             onImageUpload={(newImage: GalleryImage) => {
-                                setGalleryImages((prev) => [newImage, ...prev]);
+                                setGalleryImages((prev) => {
+                                    // Ensure prev is an array before spreading
+                                    const prevArray = Array.isArray(prev) ? prev : [];
+                                    return [newImage, ...prevArray];
+                                });
                             }}
                         />
                     )}
