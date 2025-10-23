@@ -66,6 +66,7 @@ model User {
   accounts      Account[]
   sessions      Session[]
   uploads       Uploads[]
+  galleryImages GalleryImage[]
 }
 
 model Uploads {
@@ -75,6 +76,19 @@ model Uploads {
   filePath    String
   fileData    Bytes
   packVersion String?
+  createdAt   DateTime @default(now())
+  user        User     @relation(fields: [userId], references: [id])
+}
+
+model GalleryImage {
+  id          Int      @id @default(autoincrement())
+  userId      Int
+  fileName    String
+  filePath    String
+  fileData    Bytes
+  title       String?
+  description String?
+  minecraftUsername String?
   createdAt   DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
 }

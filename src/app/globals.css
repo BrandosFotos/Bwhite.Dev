@@ -1,5 +1,10 @@
 @import 'tailwindcss';
 
+/* Custom utilities for MC page */
+.bg-gradient-radial {
+    background: radial-gradient(circle, var(--tw-gradient-stops));
+}
+
 /* Default Dark Theme */
 :root {
     --background: #171717;
