@@ -5,6 +5,7 @@ import { NextAuthOptions } from 'next-auth';
 import CredentialsProvider from 'next-auth/providers/credentials';
 
 export const authOptions: NextAuthOptions = {
+    secret: process.env.NEXTAUTH_SECRET || 'fallback-secret-key-for-development',
     session: {
         strategy: 'jwt'
     },

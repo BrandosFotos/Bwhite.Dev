@@ -1,35 +1,25 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { authOptions } from '@/lib/auth';
-import { db } from '@/lib/db';
-import { getRouteParam } from '@/lib/utils';
+import { prisma } from '@/lib/prisma';
 
-import { getServerSession } from 'next-auth';
-
-export async function PATCH(request: NextRequest): Promise<NextResponse> {
-    const id = getRouteParam(request);
-
+export async function PATCH(request: NextRequest, { params }: { params: { id: string } }) {
     try {
-        const session = await getServerSession(authOptions);
+        const id = parseInt(params.id);
+        const body = await request.json();
+        const { status } = body;
 
-        if (!session?.user?.isAdmin) {
-            return NextResponse.json({ error: 'Unauthorized' }, { status: 401 });
-        }
-
-        const { status } = await request.json();
-
-        if (!status || !['APPROVED', 'REJECTED'].includes(status)) {
+        if (!['PENDING', 'APPROVED', 'REJECTED'].includes(status)) {
             return NextResponse.json({ error: 'Invalid status' }, { status: 400 });
         }
 
-        const application = await db.minecraftApplication.update({
-            where: { id: parseInt(id) },
+        const updatedApplication = await prisma.minecraftApplication.update({
+            where: { id },
             data: { status }
         });
 
-        return NextResponse.json(application);
+        return NextResponse.json(updatedApplication);
     } catch (error) {
-        console.error('Update application error:', error);
-        return NextResponse.json({ error: 'Error updating application' }, { status: 500 });
+        console.error('Error updating application:', error);
+        return NextResponse.json({ error: 'Failed to update application' }, { status: 500 });
     }
 }

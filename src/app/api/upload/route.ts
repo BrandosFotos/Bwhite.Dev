@@ -44,7 +44,9 @@ export async function POST(request: NextRequest) {
             }
         });
 
-        return NextResponse.json(upload);
+        // Return upload without binary data to avoid JSON serialization issues
+        const { fileData, ...uploadResponse } = upload;
+        return NextResponse.json(uploadResponse);
     } catch (error) {
         console.error('Upload error:', error);
         return NextResponse.json({ error: 'Error uploading file' }, { status: 500 });

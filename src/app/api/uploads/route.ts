@@ -9,7 +9,13 @@ export async function GET() {
                 id: true,
                 fileName: true,
                 packVersion: true,
-                createdAt: true
+                createdAt: true,
+                user: {
+                    select: {
+                        name: true,
+                        email: true
+                    }
+                }
             },
             orderBy: {
                 createdAt: 'desc'

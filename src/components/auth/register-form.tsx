@@ -53,8 +53,8 @@ export default function RegisterForm() {
         <form onSubmit={onSubmit} className='mt-8 space-y-6'>
             <div className='space-y-4'>
                 <div>
-                    <label htmlFor='name' className='block text-sm font-medium text-gray-700'>
-                        Name
+                    <label htmlFor='name' className='block text-sm font-semibold text-blue-400'>
+                        Full Name
                     </label>
                     <div className='mt-1'>
                         <input
@@ -64,14 +64,14 @@ export default function RegisterForm() {
                             autoComplete='name'
                             required
                             placeholder='John Doe'
-                            className='block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none sm:text-sm'
+                            className='block w-full appearance-none rounded-lg border-2 border-gray-600 bg-gray-800/50 px-3 py-3 text-white placeholder-gray-400 shadow-sm transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none sm:text-sm'
                             disabled={loading}
                         />
                     </div>
                 </div>
                 <div>
-                    <label htmlFor='email' className='block text-sm font-medium text-gray-700'>
-                        Email
+                    <label htmlFor='email' className='block text-sm font-semibold text-blue-400'>
+                        Email Address
                     </label>
                     <div className='mt-1'>
                         <input
@@ -81,13 +81,13 @@ export default function RegisterForm() {
                             autoComplete='email'
                             required
                             placeholder='name@example.com'
-                            className='block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none sm:text-sm'
+                            className='block w-full appearance-none rounded-lg border-2 border-gray-600 bg-gray-800/50 px-3 py-3 text-white placeholder-gray-400 shadow-sm transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none sm:text-sm'
                             disabled={loading}
                         />
                     </div>
                 </div>
                 <div>
-                    <label htmlFor='password' className='block text-sm font-medium text-gray-700'>
+                    <label htmlFor='password' className='block text-sm font-semibold text-blue-400'>
                         Password
                     </label>
                     <div className='mt-1'>
@@ -97,7 +97,8 @@ export default function RegisterForm() {
                             type='password'
                             autoComplete='new-password'
                             required
-                            className='block w-full appearance-none rounded-lg border border-gray-300 px-3 py-2 placeholder-gray-400 shadow-sm transition-all focus:border-indigo-500 focus:ring-2 focus:ring-indigo-500 focus:outline-none sm:text-sm'
+                            placeholder='Create a strong password'
+                            className='block w-full appearance-none rounded-lg border-2 border-gray-600 bg-gray-800/50 px-3 py-3 text-white placeholder-gray-400 shadow-sm transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none sm:text-sm'
                             disabled={loading}
                         />
                     </div>
@@ -105,16 +106,23 @@ export default function RegisterForm() {
             </div>
 
             {error && (
-                <div className='rounded-md bg-red-50 p-4'>
-                    <div className='text-sm text-red-700'>{error}</div>
+                <div className='rounded-lg border border-red-500/30 bg-red-500/20 p-4'>
+                    <div className='text-sm text-red-400'>{error}</div>
                 </div>
             )}
 
             <button
                 type='submit'
                 disabled={loading}
-                className='flex w-full justify-center rounded-lg border border-transparent bg-indigo-600 px-4 py-2.5 text-sm font-medium text-white shadow-sm transition-all duration-200 hover:bg-indigo-700 focus:ring-2 focus:ring-indigo-500 focus:ring-offset-2 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50'>
-                {loading ? 'Creating account...' : 'Create Account'}
+                className='flex w-full justify-center rounded-xl border border-transparent bg-gradient-to-r from-blue-500 to-purple-500 px-4 py-3 text-sm font-bold text-white shadow-lg transition-all duration-200 hover:from-blue-600 hover:to-purple-600 focus:ring-2 focus:ring-blue-400 focus:ring-offset-2 focus:ring-offset-gray-900 focus:outline-none disabled:cursor-not-allowed disabled:opacity-50'>
+                {loading ? (
+                    <div className='flex items-center space-x-2'>
+                        <div className='h-4 w-4 animate-spin rounded-full border-2 border-white border-t-transparent'></div>
+                        <span>Creating account...</span>
+                    </div>
+                ) : (
+                    'Create Account'
+                )}
             </button>
         </form>
     );

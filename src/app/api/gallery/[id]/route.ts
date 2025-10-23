@@ -6,12 +6,14 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     try {
         const id = parseInt(params.id);
 
-        if (isNaN(id)) {
-            return NextResponse.json({ error: 'Invalid image ID' }, { status: 400 });
-        }
-
         const galleryImage = await prisma.galleryImage.findUnique({
-            where: { id }
+            where: { id },
+            select: {
+                id: true,
+                fileName: true,
+                fileData: true,
+                filePath: true
+            }
         });
 
         if (!galleryImage) {
@@ -21,12 +23,26 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
         return new NextResponse(galleryImage.fileData, {
             headers: {
                 'Content-Type': 'image/jpeg',
-                'Content-Length': galleryImage.fileData.length.toString(),
-                'Cache-Control': 'public, max-age=31536000'
+                'Content-Disposition': `inline; filename="${galleryImage.fileName}"`
             }
         });
     } catch (error) {
-        console.error('Error serving gallery image:', error);
-        return NextResponse.json({ error: 'Error serving image' }, { status: 500 });
+        console.error('Error fetching gallery image:', error);
+        return NextResponse.json({ error: 'Failed to fetch image' }, { status: 500 });
+    }
+}
+
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+    try {
+        const id = parseInt(params.id);
+
+        await prisma.galleryImage.delete({
+            where: { id }
+        });
+
+        return NextResponse.json({ success: true });
+    } catch (error) {
+        console.error('Error deleting gallery image:', error);
+        return NextResponse.json({ error: 'Failed to delete image' }, { status: 500 });
     }
 }

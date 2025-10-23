@@ -1,27 +1,22 @@
 import { NextRequest, NextResponse } from 'next/server';
 
-import { prisma } from '../../../../lib/prisma';
+import { prisma } from '@/lib/prisma';
 
-export async function GET(request: NextRequest) {
-    const { searchParams } = new URL(request.url);
-    const email = searchParams.get('email');
-
-    if (!email) {
-        return NextResponse.json({ error: 'Email is required' }, { status: 400 });
-    }
-
+export async function GET() {
     try {
-        const user = await prisma.user.findFirst({
-            where: { email },
-            select: { name: true }
+        const users = await prisma.user.findMany({
+            select: {
+                id: true,
+                name: true,
+                email: true,
+                isAdmin: true,
+                emailVerified: true
+            }
         });
 
-        if (!user) {
-            return NextResponse.json({ error: 'User not found' }, { status: 404 });
-        }
-
-        return NextResponse.json(user);
+        return NextResponse.json(users);
     } catch (error) {
-        return NextResponse.json({ error: 'Internal server error' }, { status: 500 });
+        console.error('Error fetching users:', error);
+        return NextResponse.json({ error: 'Failed to fetch users' }, { status: 500 });
     }
 }

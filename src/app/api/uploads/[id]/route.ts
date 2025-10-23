@@ -2,31 +2,17 @@ import { NextRequest, NextResponse } from 'next/server';
 
 import { prisma } from '@/lib/prisma';
 
-export async function GET(request: NextRequest) {
+export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
     try {
-        const id = request.nextUrl.pathname.split('/').pop();
-        if (!id) {
-            return NextResponse.json({ error: 'Missing file ID' }, { status: 400 });
-        }
+        const id = parseInt(params.id);
 
-        const upload = await prisma.uploads.findUnique({
-            where: { id: parseInt(id) }
+        await prisma.uploads.delete({
+            where: { id }
         });
 
-        if (!upload) {
-            return NextResponse.json({ error: 'File not found' }, { status: 404 });
-        }
-
-        const fileBuffer = Buffer.from(upload.fileData);
-
-        return new NextResponse(fileBuffer, {
-            headers: {
-                'Content-Type': 'application/octet-stream',
-                'Content-Disposition': `attachment; filename="${upload.fileName}"`
-            }
-        });
+        return NextResponse.json({ success: true });
     } catch (error) {
-        console.error('Error serving file:', error);
-        return NextResponse.json({ error: 'Error serving file' }, { status: 500 });
+        console.error('Error deleting upload:', error);
+        return NextResponse.json({ error: 'Failed to delete upload' }, { status: 500 });
     }
 }
