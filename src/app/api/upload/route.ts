@@ -16,6 +16,7 @@ export async function POST(request: NextRequest) {
         const data = await request.formData();
         const file: File | null = data.get('file') as unknown as File;
         const packVersion = data.get('packVersion') as string;
+        const pack = data.get('pack') as string;
 
         if (!file) {
             return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
@@ -23,6 +24,10 @@ export async function POST(request: NextRequest) {
 
         if (!packVersion) {
             return NextResponse.json({ error: 'Pack version is required' }, { status: 400 });
+        }
+
+        if (!pack || !['CAPLAND', 'SKYBLOCK', 'VANILLAPLUS'].includes(pack)) {
+            return NextResponse.json({ error: 'Valid pack is required (CAPLAND, SKYBLOCK, or VANILLAPLUS)' }, { status: 400 });
         }
 
         // Validate file size (max 50MB)
@@ -40,6 +45,7 @@ export async function POST(request: NextRequest) {
                 filePath: `/uploads/${Date.now()}-${file.name}`,
                 fileData: buffer,
                 packVersion,
+                pack: pack as 'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS',
                 userId: parseInt(session.user.id)
             }
         });

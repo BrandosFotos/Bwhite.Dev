@@ -67,6 +67,8 @@ model User {
   sessions      Session[]
   uploads       Uploads[]
   galleryImages GalleryImage[]
+
+  @@map("users") // force lowercase table name
 }
 
 model Uploads {
@@ -77,7 +79,10 @@ model Uploads {
   createdAt   DateTime @default(now())
   fileData    Bytes
   packVersion String?
+  pack        Pack     @default(CAPLAND)
   user        User     @relation(fields: [userId], references: [id])
+
+  @@map("uploads")
 }
 
 model GalleryImage {
@@ -89,12 +94,21 @@ model GalleryImage {
   title       String?
   description String?
   minecraftUsername String?
+  pack        Pack     @default(CAPLAND)
   createdAt   DateTime @default(now())
   user        User     @relation(fields: [userId], references: [id])
+
+  @@map("gallery_images")
 }
 
 enum Status {
   PENDING
   APPROVED
   REJECTED
+}
+
+enum Pack {
+  CAPLAND
+  SKYBLOCK
+  VANILLAPLUS
 }

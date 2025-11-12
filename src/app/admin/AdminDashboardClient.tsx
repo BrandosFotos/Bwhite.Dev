@@ -3,6 +3,8 @@
 import React, { useEffect, useState } from 'react';
 
 import { motion } from 'framer-motion';
+import { signOut, useSession } from 'next-auth/react';
+import { LogOut } from 'lucide-react';
 
 interface User {
     id: number;
@@ -27,6 +29,7 @@ interface Upload {
     id: number;
     fileName: string;
     packVersion: string | null;
+    pack: 'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS';
     createdAt: string;
     user: {
         name: string | null;
@@ -40,6 +43,7 @@ interface GalleryImage {
     title: string | null;
     description: string | null;
     minecraftUsername: string | null;
+    pack: 'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS';
     createdAt: string;
     user: {
         name: string | null;
@@ -48,6 +52,7 @@ interface GalleryImage {
 }
 
 export default function AdminDashboardClient() {
+    const { data: session } = useSession();
     const [users, setUsers] = useState<User[]>([]);
     const [whitelistApplications, setWhitelistApplications] = useState<MinecraftApplication[]>([]);
     const [uploads, setUploads] = useState<Upload[]>([]);
@@ -57,10 +62,19 @@ export default function AdminDashboardClient() {
     const [activeTab, setActiveTab] = useState<'overview' | 'whitelist' | 'gallery' | 'files' | 'users'>('overview');
     const [uploadForm, setUploadForm] = useState({
         file: null as File | null,
-        packVersion: ''
+        packVersion: '',
+        pack: 'CAPLAND' as 'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS'
     });
     const [uploadStatus, setUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle');
     const [uploadError, setUploadError] = useState<string | null>(null);
+    const [galleryUploadForm, setGalleryUploadForm] = useState({
+        file: null as File | null,
+        title: '',
+        description: '',
+        pack: 'CAPLAND' as 'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS'
+    });
+    const [galleryUploadStatus, setGalleryUploadStatus] = useState<'idle' | 'uploading' | 'success' | 'error'>('idle');
+    const [galleryUploadError, setGalleryUploadError] = useState<string | null>(null);
 
     useEffect(() => {
         const fetchData = async () => {
@@ -185,6 +199,7 @@ export default function AdminDashboardClient() {
             const formData = new FormData();
             formData.append('file', uploadForm.file);
             formData.append('packVersion', uploadForm.packVersion);
+            formData.append('pack', uploadForm.pack);
 
             const response = await fetch('/api/upload', {
                 method: 'POST',
@@ -194,7 +209,7 @@ export default function AdminDashboardClient() {
             if (response.ok) {
                 const newUpload = await response.json();
                 setUploads((prev) => [newUpload, ...prev]);
-                setUploadForm({ file: null, packVersion: '' });
+                setUploadForm({ file: null, packVersion: '', pack: 'CAPLAND' });
                 setUploadStatus('success');
                 setTimeout(() => setUploadStatus('idle'), 3000);
             } else {
@@ -344,7 +359,20 @@ export default function AdminDashboardClient() {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}>
-                    <h1 className='mb-8 text-center text-4xl font-bold text-white'>Admin Dashboard</h1>
+                    <div className='relative mb-8'>
+                        <h1 className='text-center text-2xl font-bold text-white sm:text-4xl'>Admin Dashboard</h1>
+                        <button
+                            onClick={async () => {
+                                await signOut({ 
+                                    callbackUrl: '/',
+                                    redirect: true 
+                                });
+                            }}
+                            className='absolute right-0 top-1/2 -translate-y-1/2 flex items-center gap-1 sm:gap-2 rounded-lg border border-red-500/30 bg-red-500/20 px-2 py-1.5 sm:px-4 sm:py-2 text-xs sm:text-base font-semibold text-red-400 transition-all duration-300 hover:bg-red-500/30 hover:shadow-lg hover:shadow-red-500/25'>
+                            <LogOut className='h-3 w-3 sm:h-4 sm:w-4' />
+                            <span className='hidden sm:inline'>Logout</span>
+                        </button>
+                    </div>
 
                     {/* Tab Navigation */}
                     <div className='mb-8 flex flex-wrap justify-center gap-2'>
@@ -565,6 +593,153 @@ export default function AdminDashboardClient() {
                             transition={{ duration: 0.6, delay: 0.1 }}
                             className='mb-8 rounded-lg border border-purple-500/20 bg-gray-900/50 p-6 backdrop-blur-sm'>
                             <h2 className='mb-4 text-2xl font-semibold text-white'>Gallery Images</h2>
+
+                            {/* Gallery Upload Form */}
+                            <div className='mb-6 rounded-lg border border-purple-500/30 bg-gray-800/50 p-4'>
+                                <h3 className='mb-4 text-lg font-semibold text-purple-400'>Upload New Gallery Image</h3>
+                                <form
+                                    onSubmit={async (e) => {
+                                        e.preventDefault();
+                                        if (!galleryUploadForm.file) {
+                                            setGalleryUploadError('Please select an image file');
+                                            return;
+                                        }
+
+                                        setGalleryUploadStatus('uploading');
+                                        setGalleryUploadError(null);
+
+                                        try {
+                                            const formData = new FormData();
+                                            formData.append('file', galleryUploadForm.file);
+                                            formData.append('title', galleryUploadForm.title);
+                                            formData.append('description', galleryUploadForm.description);
+                                            formData.append('pack', galleryUploadForm.pack);
+
+                                            const response = await fetch('/api/gallery', {
+                                                method: 'POST',
+                                                body: formData
+                                            });
+
+                                            if (response.ok) {
+                                                const newImage = await response.json();
+                                                setGalleryImages((prev) => [newImage, ...prev]);
+                                                setGalleryUploadForm({ file: null, title: '', description: '', pack: 'CAPLAND' });
+                                                setGalleryUploadStatus('success');
+                                                setTimeout(() => setGalleryUploadStatus('idle'), 3000);
+                                            } else {
+                                                const errorData = await response.json();
+                                                setGalleryUploadError(errorData.error || 'Upload failed');
+                                                setGalleryUploadStatus('error');
+                                            }
+                                        } catch (error) {
+                                            console.error('Gallery upload error:', error);
+                                            setGalleryUploadError('Upload failed. Please try again.');
+                                            setGalleryUploadStatus('error');
+                                        }
+                                    }}
+                                    className='space-y-4'>
+                                    <div>
+                                        <label htmlFor='galleryPack' className='mb-2 block text-sm font-semibold text-purple-400'>
+                                            Pack *
+                                        </label>
+                                        <select
+                                            id='galleryPack'
+                                            value={galleryUploadForm.pack}
+                                            onChange={(e) =>
+                                                setGalleryUploadForm((prev) => ({
+                                                    ...prev,
+                                                    pack: e.target.value as 'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS'
+                                                }))
+                                            }
+                                            className='w-full rounded-lg border-2 border-gray-600 bg-gray-800/50 p-3 text-white transition-all focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 focus:outline-none'
+                                            required>
+                                            <option value='CAPLAND'>Capland</option>
+                                            <option value='SKYBLOCK'>Skyblock</option>
+                                            <option value='VANILLAPLUS'>Vanilla++</option>
+                                        </select>
+                                    </div>
+                                    <div>
+                                        <label htmlFor='galleryTitle' className='mb-2 block text-sm font-semibold text-purple-400'>
+                                            Title
+                                        </label>
+                                        <input
+                                            type='text'
+                                            id='galleryTitle'
+                                            value={galleryUploadForm.title}
+                                            onChange={(e) =>
+                                                setGalleryUploadForm((prev) => ({ ...prev, title: e.target.value }))
+                                            }
+                                            className='w-full rounded-lg border-2 border-gray-600 bg-gray-800/50 p-3 text-white placeholder-gray-400 transition-all focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 focus:outline-none'
+                                            placeholder='Image title (optional)'
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor='galleryDescription' className='mb-2 block text-sm font-semibold text-purple-400'>
+                                            Description
+                                        </label>
+                                        <textarea
+                                            id='galleryDescription'
+                                            value={galleryUploadForm.description}
+                                            onChange={(e) =>
+                                                setGalleryUploadForm((prev) => ({ ...prev, description: e.target.value }))
+                                            }
+                                            className='w-full rounded-lg border-2 border-gray-600 bg-gray-800/50 p-3 text-white placeholder-gray-400 transition-all focus:border-purple-400 focus:ring-2 focus:ring-purple-400/20 focus:outline-none'
+                                            placeholder='Image description (optional)'
+                                            rows={3}
+                                        />
+                                    </div>
+                                    <div>
+                                        <label htmlFor='galleryFile' className='mb-2 block text-sm font-semibold text-purple-400'>
+                                            Select Image File *
+                                        </label>
+                                        <p className='mb-2 text-xs text-gray-400'>
+                                            Maximum file size: 50MB. Supported formats: JPG, PNG, GIF, WEBP
+                                        </p>
+                                        <input
+                                            type='file'
+                                            id='galleryFile'
+                                            accept='image/*'
+                                            onChange={(e) =>
+                                                setGalleryUploadForm((prev) => ({
+                                                    ...prev,
+                                                    file: e.target.files?.[0] || null
+                                                }))
+                                            }
+                                            className='w-full rounded-lg border-2 border-gray-600 bg-gray-800/50 p-3 text-white transition-all file:mr-4 file:rounded-lg file:border-0 file:bg-purple-500 file:px-4 file:py-2 file:text-sm file:font-semibold file:text-white hover:file:bg-purple-600'
+                                            required
+                                        />
+                                    </div>
+                                    {galleryUploadError && (
+                                        <div className='rounded-lg border border-red-500/30 bg-red-500/20 p-3 text-sm text-red-400'>
+                                            {galleryUploadError}
+                                        </div>
+                                    )}
+                                    {galleryUploadStatus === 'success' && (
+                                        <div className='rounded-lg border border-green-500/30 bg-green-500/20 p-3 text-sm text-green-400'>
+                                            ✅ Gallery image uploaded successfully!
+                                        </div>
+                                    )}
+                                    <div className='flex gap-3'>
+                                        <button
+                                            type='submit'
+                                            disabled={galleryUploadStatus === 'uploading' || !galleryUploadForm.file}
+                                            className='flex-1 rounded-xl bg-gradient-to-r from-purple-500 to-pink-500 px-6 py-3 font-bold text-white transition-all duration-300 hover:from-purple-600 hover:to-pink-600 disabled:cursor-not-allowed disabled:from-gray-600 disabled:to-gray-700'>
+                                            {galleryUploadStatus === 'uploading' ? 'Uploading...' : 'Upload Image'}
+                                        </button>
+                                        <button
+                                            type='button'
+                                            onClick={() => {
+                                                setGalleryUploadForm({ file: null, title: '', description: '', pack: 'CAPLAND' });
+                                                setGalleryUploadError(null);
+                                                setGalleryUploadStatus('idle');
+                                            }}
+                                            className='rounded-xl bg-gray-600 px-6 py-3 font-bold text-white transition-all duration-300 hover:bg-gray-700'>
+                                            Clear
+                                        </button>
+                                    </div>
+                                </form>
+                            </div>
+
                             <div className='overflow-x-auto'>
                                 <table className='min-w-full divide-y divide-gray-700'>
                                     <thead className='bg-gray-800/50'>
@@ -574,6 +749,9 @@ export default function AdminDashboardClient() {
                                             </th>
                                             <th className='px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase'>
                                                 Title
+                                            </th>
+                                            <th className='px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase'>
+                                                Pack
                                             </th>
                                             <th className='px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase'>
                                                 Minecraft Username
@@ -597,6 +775,11 @@ export default function AdminDashboardClient() {
                                                 </td>
                                                 <td className='px-6 py-4 text-sm whitespace-nowrap text-gray-300'>
                                                     {image.title || 'Untitled'}
+                                                </td>
+                                                <td className='px-6 py-4 text-sm whitespace-nowrap text-gray-300'>
+                                                    <span className='inline-flex rounded-full px-2 py-1 text-xs font-semibold border border-blue-500/30 bg-blue-500/20 text-blue-400'>
+                                                        {image.pack === 'CAPLAND' ? 'Capland' : image.pack === 'SKYBLOCK' ? 'Skyblock' : 'Vanilla++'}
+                                                    </span>
                                                 </td>
                                                 <td className='px-6 py-4 text-sm whitespace-nowrap text-gray-300'>
                                                     {image.minecraftUsername}
@@ -635,6 +818,25 @@ export default function AdminDashboardClient() {
                             <div className='mb-6 rounded-lg border border-blue-500/30 bg-gray-800/50 p-4'>
                                 <h3 className='mb-4 text-lg font-semibold text-blue-400'>Upload New Modpack</h3>
                                 <form onSubmit={handleUpload} className='space-y-4'>
+                                    <div>
+                                        <label
+                                            htmlFor='pack'
+                                            className='mb-2 block text-sm font-semibold text-blue-400'>
+                                            Pack *
+                                        </label>
+                                        <select
+                                            id='pack'
+                                            value={uploadForm.pack}
+                                            onChange={(e) =>
+                                                setUploadForm((prev) => ({ ...prev, pack: e.target.value as 'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS' }))
+                                            }
+                                            className='w-full rounded-lg border-2 border-gray-600 bg-gray-800/50 p-3 text-white transition-all focus:border-blue-400 focus:ring-2 focus:ring-blue-400/20 focus:outline-none'
+                                            required>
+                                            <option value='CAPLAND'>Capland</option>
+                                            <option value='SKYBLOCK'>Skyblock</option>
+                                            <option value='VANILLAPLUS'>Vanilla++</option>
+                                        </select>
+                                    </div>
                                     <div>
                                         <label
                                             htmlFor='packVersion'
@@ -695,7 +897,7 @@ export default function AdminDashboardClient() {
                                         <button
                                             type='button'
                                             onClick={() => {
-                                                setUploadForm({ file: null, packVersion: '' });
+                                                setUploadForm({ file: null, packVersion: '', pack: 'CAPLAND' });
                                                 setUploadError(null);
                                                 setUploadStatus('idle');
                                             }}
@@ -712,6 +914,9 @@ export default function AdminDashboardClient() {
                                         <tr>
                                             <th className='px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase'>
                                                 File Name
+                                            </th>
+                                            <th className='px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase'>
+                                                Pack
                                             </th>
                                             <th className='px-6 py-3 text-left text-xs font-medium tracking-wider text-gray-300 uppercase'>
                                                 Pack Version
@@ -732,6 +937,11 @@ export default function AdminDashboardClient() {
                                             <tr key={upload.id} className='transition-colors hover:bg-gray-800/50'>
                                                 <td className='px-6 py-4 text-sm font-medium whitespace-nowrap text-white'>
                                                     {upload.fileName}
+                                                </td>
+                                                <td className='px-6 py-4 text-sm whitespace-nowrap text-gray-300'>
+                                                    <span className='inline-flex rounded-full px-2 py-1 text-xs font-semibold border border-blue-500/30 bg-blue-500/20 text-blue-400'>
+                                                        {upload.pack === 'CAPLAND' ? 'Capland' : upload.pack === 'SKYBLOCK' ? 'Skyblock' : 'Vanilla++'}
+                                                    </span>
                                                 </td>
                                                 <td className='px-6 py-4 text-sm whitespace-nowrap text-gray-300'>
                                                     {upload.packVersion || 'N/A'}

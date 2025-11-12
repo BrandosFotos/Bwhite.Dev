@@ -1,40 +1,54 @@
 {
-    "compilerOptions": {
-        "lib": [
-            "dom",
-            "dom.iterable",
-            "esnext"
-        ],
-        "allowJs": true,
-        "skipLibCheck": true,
-        "strict": true,
-        "noEmit": true,
-        "esModuleInterop": true,
-        "module": "esnext",
-        "moduleResolution": "bundler",
-        "resolveJsonModule": true,
-        "isolatedModules": true,
-        "jsx": "preserve",
-        "incremental": true,
-        "plugins": [
-            {
-                "name": "next"
-            }
-        ],
-        "paths": {
-            "@/*": [
-                "./src/*"
-            ]
-        },
-        "target": "ES2023"
-    },
-    "include": [
-        "next-env.d.ts",
-        "**/*.ts",
-        "**/*.tsx",
-        ".next/types/**/*.ts"
+  "compilerOptions": {
+    /* === Core Environment === */
+    "target": "ES2023",
+    "lib": [
+      "dom",
+      "dom.iterable",
+      "esnext"
     ],
-    "exclude": [
-        "node_modules"
-    ]
+    /* === Module System === */
+    "module": "esnext",
+    "moduleResolution": "bundler",
+    "resolveJsonModule": true,
+    "esModuleInterop": true,
+    "allowSyntheticDefaultImports": true,
+    /* === React & Next.js === */
+    "jsx": "react-jsx",
+    "plugins": [
+      {
+        "name": "next"
+      }
+    ],
+    /* === Type Safety === */
+    "strict": true,
+    "noImplicitAny": true,
+    "noFallthroughCasesInSwitch": true,
+    "forceConsistentCasingInFileNames": true,
+    "skipLibCheck": true, // faster builds
+    /* === Performance === */
+    "incremental": true,
+    "isolatedModules": true,
+    "noEmit": true,
+    /* === Path Aliases === */
+    "baseUrl": ".",
+    "paths": {
+      "@/*": [
+        "./src/*"
+      ]
+    },
+    "allowJs": true
+  },
+  /* === Project Structure === */
+  "include": [
+    "next-env.d.ts",
+    "**/*.ts",
+    "**/*.tsx",
+    ".next/types/**/*.ts",
+    ".next/dev/types/**/*.ts"
+  ],
+  "exclude": [
+    "node_modules",
+    ".next"
+  ]
 }

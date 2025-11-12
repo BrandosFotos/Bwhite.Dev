@@ -9,6 +9,7 @@ export async function GET() {
                 id: true,
                 fileName: true,
                 packVersion: true,
+                pack: true,
                 createdAt: true,
                 user: {
                     select: {

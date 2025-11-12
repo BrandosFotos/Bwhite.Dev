@@ -36,9 +36,10 @@ export default function SkyblockPage() {
     ];
 
     const [versions, setVersions] = useState<Version[]>([]);
+    const [copied, setCopied] = useState(false);
 
     useEffect(() => {
-        fetch('/api/versions')
+        fetch('/api/versions?pack=SKYBLOCK')
             .then((res) => res.json())
             .then((data) => {
                 if (Array.isArray(data)) setVersions(data);
@@ -154,13 +155,89 @@ export default function SkyblockPage() {
                                 <p>4. Launch the modpack and connect using the server IP below.</p>
                             </div>
 
-                            {/* VersionsSection */}
-                            <VersionsSection versions={versions} />
+                            {versions.length > 0 && versions[0] && (
+                            <motion.div
+                            className='mt-6'
+                            initial={{ opacity: 0, scale: 0.9 }}
+                            animate={{ opacity: 1, scale: 1 }}
+                            transition={{ duration: 0.5, delay: 0.3 }}>
+                            <a
+                                href={`/api/uploads/${versions[0].id}`}
+                                className='inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-500 to-blue-500 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-green-500/25 transition-all duration-300 hover:scale-105 hover:from-green-600 hover:to-blue-600 hover:shadow-green-500/40'>
+                                <span className='text-2xl'>📥</span>
+                                Download Latest Modpack (v{versions[0].packVersion})
+                            </a>
+                            </motion.div>
+                            )}
 
                             {/* Server IP */}
-                            <p className='mt-4 text-center text-sm text-gray-400'>
-                                Server IP: mc.bwhite.dev — Modpack works with CurseForge Launcher.
-                            </p>
+                            <motion.div
+                                className='mt-8'
+                                initial={{ opacity: 0, y: 10 }}
+                                animate={{ opacity: 1, y: 0 }}
+                                transition={{ duration: 0.5, delay: 0.4 }}>
+                                <div className='mx-auto max-w-md rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 to-orange-500/10 p-6 backdrop-blur-sm'>
+                                    <div className='mb-3 flex items-center justify-center gap-2'>
+                                        <span className='text-2xl'>🌐</span>
+                                        <h3 className='text-lg font-semibold text-amber-400'>Server Information</h3>
+                                    </div>
+                                    <div className='mb-4 flex items-center justify-center gap-3'>
+                                        <code className='rounded-lg bg-black/30 px-4 py-2 text-lg font-mono font-bold text-white'>
+                                            mc.bwhite.dev
+                                        </code>
+                                        <button
+                                            onClick={async () => {
+                                                try {
+                                                    await navigator.clipboard.writeText('mc.bwhite.dev');
+                                                    setCopied(true);
+                                                    setTimeout(() => setCopied(false), 2000);
+                                                } catch (err) {
+                                                    console.error('Failed to copy:', err);
+                                                }
+                                            }}
+                                            className='rounded-lg bg-amber-500/20 p-2 text-amber-400 transition-all duration-300 hover:bg-amber-500/30 hover:scale-110'
+                                            title={copied ? 'Copied!' : 'Copy to clipboard'}>
+                                            {copied ? (
+                                                <svg
+                                                    className='h-5 w-5'
+                                                    fill='none'
+                                                    stroke='currentColor'
+                                                    viewBox='0 0 24 24'>
+                                                    <path
+                                                        strokeLinecap='round'
+                                                        strokeLinejoin='round'
+                                                        strokeWidth={2}
+                                                        d='M5 13l4 4L19 7'
+                                                    />
+                                                </svg>
+                                            ) : (
+                                                <svg
+                                                    className='h-5 w-5'
+                                                    fill='none'
+                                                    stroke='currentColor'
+                                                    viewBox='0 0 24 24'>
+                                                    <path
+                                                        strokeLinecap='round'
+                                                        strokeLinejoin='round'
+                                                        strokeWidth={2}
+                                                        d='M8 16H6a2 2 0 01-2-2V6a2 2 0 012-2h8a2 2 0 012 2v2m-6 12h8a2 2 0 002-2v-8a2 2 0 00-2-2h-8a2 2 0 00-2 2v8a2 2 0 002 2z'
+                                                    />
+                                                </svg>
+                                            )}
+                                        </button>
+                                    </div>
+                                    <p className='text-center text-sm text-gray-300'>
+                                        <span className='text-amber-400'>💡</span> Modpack works with{' '}
+                                        <a
+                                            href='https://curseforge.overwolf.com/'
+                                            target='_blank'
+                                            rel='noopener noreferrer'
+                                            className='text-amber-300 underline hover:text-amber-200'>
+                                            CurseForge Launcher
+                                        </a>
+                                    </p>
+                                </div>
+                            </motion.div>
                         </motion.div>
                     )}
                 </div>
