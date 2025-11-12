@@ -3,23 +3,9 @@
 import React, { useEffect, useState } from 'react';
 
 import { BackgroundPatterns } from './components/BackgroundPatterns';
-import { GallerySection } from './components/GallerySection';
 import { VersionsSection } from './components/VersionsSection';
 import { colors, icons } from './components/theme';
 import { motion } from 'framer-motion';
-
-interface GalleryImage {
-    id: number;
-    fileName: string;
-    title?: string;
-    description?: string;
-    minecraftUsername?: string;
-    createdAt: string;
-    user: {
-        name?: string;
-        email: string;
-    };
-}
 
 interface Version {
     id: number;
@@ -28,30 +14,19 @@ interface Version {
     createdAt: string;
 }
 
-export default function CaplandPage() {
+export default function VanillaPlusPage() {
     const [activeTab, setActiveTab] = useState('overview');
     const tabs = [
         { key: 'overview', label: 'Overview', icon: icons.overview },
         { key: 'rules', label: 'Rules', icon: icons.rules },
-        { key: 'join', label: 'Join Capland', icon: icons.join }
+        { key: 'join', label: 'Join Vanilla+', icon: icons.join }
     ];
 
-    const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
     const [versions, setVersions] = useState<Version[]>([]);
     const [copied, setCopied] = useState(false);
 
     useEffect(() => {
-        fetch('/api/gallery?pack=CAPLAND')
-            .then((res) => res.json())
-            .then((data) => {
-                if (Array.isArray(data)) setGalleryImages(data);
-                else setGalleryImages([]);
-            })
-            .catch((err) => console.error('Error fetching gallery images:', err));
-    }, []);
-
-    useEffect(() => {
-        fetch('/api/versions?pack=CAPLAND')
+        fetch('/api/versions?pack=VANILLAPLUS')
             .then((res) => res.json())
             .then((data) => {
                 if (Array.isArray(data)) setVersions(data);
@@ -73,11 +48,11 @@ export default function CaplandPage() {
                     initial={{ opacity: 0, y: -20 }}
                     animate={{ opacity: 1, y: 0 }}
                     transition={{ duration: 0.6 }}>
-                    <h1 className={`bg-clip-text text-5xl font-bold ${colors.text}`}>Capland Server</h1>
+                    <h1 className={`text-5xl font-bold ${colors.text}`}>Vanilla+ Server</h1>
                     <p className={`mx-auto mt-4 max-w-2xl text-lg ${colors.textSecondary}`}>
-                        Welcome to Capland — a creative, family-friendly Minecraft world where everyone is welcome.
+                        Welcome to Vanilla+ — a family-friendly Minecraft server with enhanced vanilla gameplay where
+                        everyone is welcome.
                     </p>
-
                 </motion.div>
 
                 {/* Tabs */}
@@ -109,11 +84,12 @@ export default function CaplandPage() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}>
-                            <h2 className='mb-3 text-2xl font-bold'>About Capland</h2>
+                            <h2 className='mb-3 text-2xl font-bold'>About Vanilla+</h2>
                             <p className={`leading-relaxed ${colors.textSecondary}`}>
-                                Capland is a survival-based Minecraft realm where creativity meets community. Build
-                                cities, explore, trade, and make memories with friends and family in a safe and
-                                welcoming environment. All players are encouraged to be kind, helpful, and respectful.
+                                Vanilla+ is a Minecraft server that enhances the vanilla experience with quality-of-life
+                                improvements and carefully selected additions. Enjoy the classic Minecraft gameplay you
+                                love, with subtle enhancements that make the experience even better. All players are
+                                encouraged to be kind, helpful, and respectful.
                             </p>
                         </motion.div>
                     )}
@@ -128,7 +104,7 @@ export default function CaplandPage() {
                                 <li>• Be respectful to all players.</li>
                                 <li>• No griefing, stealing, or cheating.</li>
                                 <li>• Keep chat friendly — this is a family-safe space.</li>
-                                <li>• Build responsibly and respect others’ areas.</li>
+                                <li>• Build responsibly and respect others' areas.</li>
                                 <li>• Have fun and help new players feel welcome!</li>
                             </ul>
                         </motion.div>
@@ -139,11 +115,11 @@ export default function CaplandPage() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}>
-                            <h2 className='mb-3 text-2xl font-bold'>Join Capland</h2>
+                            <h2 className='mb-3 text-2xl font-bold'>Join Vanilla++</h2>
                             <p className={`mb-4 ${colors.textSecondary}`}>
                                 We welcome you to join! We use CurseForge to make distribution of mods, settings, and
-                                configuration easy and quick. Below are instructions to install and join us. We hope to
-                                see you soon!
+                                configuration easy and quick. Below are instructions to install and join us. We hope to see
+                                you soon!
                             </p>
 
                             {/* Instructions */}
@@ -159,7 +135,7 @@ export default function CaplandPage() {
                                     </a>
                                     .
                                 </p>
-                                <p>2. Download the Capland modpack using the version list below.</p>
+                                <p>2. Download the Vanilla+ modpack using the version list below.</p>
                                 <p>
                                     3. Open CurseForge, click "Import Modpack" (or "Add Existing Modpack"), and select
                                     the downloaded file.
@@ -168,18 +144,18 @@ export default function CaplandPage() {
                             </div>
 
                             {versions.length > 0 && versions[0] && (
-                            <motion.div
-                            className='mt-6'
-                            initial={{ opacity: 0, scale: 0.9 }}
-                            animate={{ opacity: 1, scale: 1 }}
-                            transition={{ duration: 0.5, delay: 0.3 }}>
-                            <a
-                                href={`/api/uploads/${versions[0].id}`}
-                                className='inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-500 to-blue-500 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-green-500/25 transition-all duration-300 hover:scale-105 hover:from-green-600 hover:to-blue-600 hover:shadow-green-500/40'>
-                                <span className='text-2xl'>📥</span>
-                                Download Latest Modpack (v{versions[0].packVersion})
-                            </a>
-                            </motion.div>
+                                <motion.div
+                                    className='mt-6'
+                                    initial={{ opacity: 0, scale: 0.9 }}
+                                    animate={{ opacity: 1, scale: 1 }}
+                                    transition={{ duration: 0.5, delay: 0.3 }}>
+                                    <a
+                                        href={`/api/uploads/${versions[0].id}`}
+                                        className='inline-flex items-center gap-2 rounded-xl bg-gradient-to-r from-green-500 to-blue-500 px-8 py-4 text-lg font-bold text-white shadow-lg shadow-green-500/25 transition-all duration-300 hover:scale-105 hover:from-green-600 hover:to-blue-600 hover:shadow-green-500/40'>
+                                        <span className='text-2xl'>📥</span>
+                                        Download Latest Modpack (v{versions[0].packVersion})
+                                    </a>
+                                </motion.div>
                             )}
 
                             {/* Server IP */}
@@ -254,18 +230,12 @@ export default function CaplandPage() {
                     )}
                 </div>
 
-                {/* Gallery Section */}
-                <GallerySection
-                    images={galleryImages}
-                    isWhitelisted={true}
-                    onImageUpload={(newImage) => setGalleryImages((prev) => [newImage, ...prev])}
-                />
-
                 {/* Footer */}
                 <footer className='mt-12 pb-6 text-center text-sm text-gray-500'>
-                    © {new Date().getFullYear()} Capland • Part of the bwhite.dev Network
+                    © {new Date().getFullYear()} Vanilla+  • Part of the bwhite.dev Network
                 </footer>
             </div>
         </div>
     );
 }
+

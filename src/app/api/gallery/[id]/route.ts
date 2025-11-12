@@ -1,13 +1,13 @@
 import { NextRequest, NextResponse } from 'next/server';
-
 import { prisma } from '@/lib/prisma';
 
-export async function GET(request: NextRequest, { params }: { params: { id: string } }) {
+export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
-        const id = parseInt(params.id);
+        const { id } = await context.params; // ✅ await the params
+        const parsedId = parseInt(id);
 
         const galleryImage = await prisma.galleryImage.findUnique({
-            where: { id },
+            where: { id: parsedId },
             select: {
                 id: true,
                 fileName: true,
@@ -20,9 +20,23 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
             return NextResponse.json({ error: 'Image not found' }, { status: 404 });
         }
 
+        // Detect content type from file extension
+        const getContentType = (fileName: string): string => {
+            const ext = fileName.toLowerCase().split('.').pop();
+            const contentTypes: Record<string, string> = {
+                jpg: 'image/jpeg',
+                jpeg: 'image/jpeg',
+                png: 'image/png',
+                gif: 'image/gif',
+                webp: 'image/webp',
+                svg: 'image/svg+xml'
+            };
+            return contentTypes[ext || ''] || 'image/jpeg';
+        };
+
         return new NextResponse(galleryImage.fileData, {
             headers: {
-                'Content-Type': 'image/jpeg',
+                'Content-Type': getContentType(galleryImage.fileName),
                 'Content-Disposition': `inline; filename="${galleryImage.fileName}"`
             }
         });
@@ -32,12 +46,13 @@ export async function GET(request: NextRequest, { params }: { params: { id: stri
     }
 }
 
-export async function DELETE(request: NextRequest, { params }: { params: { id: string } }) {
+export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
     try {
-        const id = parseInt(params.id);
+        const { id } = await context.params; // ✅ await the params
+        const parsedId = parseInt(id);
 
         await prisma.galleryImage.delete({
-            where: { id }
+            where: { id: parsedId }
         });
 
         return NextResponse.json({ success: true });

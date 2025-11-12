@@ -1,33 +1,55 @@
 import { NextRequest, NextResponse } from 'next/server';
 
+import { authOptions } from '@/lib/auth';
 import { prisma } from '@/lib/prisma';
+
+import { getServerSession } from 'next-auth';
 
 export async function POST(request: NextRequest) {
     try {
+        const session = await getServerSession(authOptions);
+
+        // Check if user is admin (for admin uploads) or get username (for user uploads)
         const data = await request.formData();
         const file: File | null = data.get('file') as unknown as File;
         const title = data.get('title') as string;
         const description = data.get('description') as string;
         const username = data.get('username') as string;
+        const pack = data.get('pack') as string;
 
         if (!file) {
             return NextResponse.json({ error: 'No file uploaded' }, { status: 400 });
         }
 
-        if (!username) {
-            return NextResponse.json({ error: 'Username is required' }, { status: 400 });
+        // If admin is uploading, skip username validation
+        let minecraftUsername: string | null = null;
+        if (session?.user?.isAdmin) {
+            // Admin upload - username is optional
+            minecraftUsername = username || null;
+        } else {
+            // Regular user upload - username is required
+            if (!username) {
+                return NextResponse.json({ error: 'Username is required' }, { status: 400 });
+            }
+
+            // Check if username has an approved Minecraft application
+            const minecraftApp = await prisma.minecraftApplication.findFirst({
+                where: {
+                    username: username,
+                    status: 'APPROVED'
+                }
+            });
+
+            if (!minecraftApp) {
+                return NextResponse.json({ error: 'Username not found or not whitelisted' }, { status: 403 });
+            }
+            minecraftUsername = username;
         }
 
-        // Check if username has an approved Minecraft application
-        const minecraftApp = await prisma.minecraftApplication.findFirst({
-            where: {
-                username: username,
-                status: 'APPROVED'
-            }
-        });
-
-        if (!minecraftApp) {
-            return NextResponse.json({ error: 'Username not found or not whitelisted' }, { status: 403 });
+        // Validate and set pack (default to CAPLAND if not provided or invalid)
+        let packValue: 'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS' = 'CAPLAND';
+        if (pack && ['CAPLAND', 'SKYBLOCK', 'VANILLAPLUS'].includes(pack)) {
+            packValue = pack as 'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS';
         }
 
         // Validate file type
@@ -51,8 +73,9 @@ export async function POST(request: NextRequest) {
                 fileData: buffer,
                 title: title || null,
                 description: description || null,
-                minecraftUsername: username,
-                userId: 1 // Default user ID since we're not using session-based auth
+                minecraftUsername: minecraftUsername,
+                pack: packValue,
+                userId: session?.user?.id ? parseInt(session.user.id) : 1
             }
         });
 
@@ -65,9 +88,18 @@ export async function POST(request: NextRequest) {
     }
 }
 
-export async function GET() {
+export async function GET(request: NextRequest) {
     try {
+        const searchParams = request.nextUrl.searchParams;
+        const pack = searchParams.get('pack'); // CAPLAND, SKYBLOCK, or VANILLAPLUS
+
+        const where: any = {};
+        if (pack && ['CAPLAND', 'SKYBLOCK', 'VANILLAPLUS'].includes(pack)) {
+            where.pack = pack;
+        }
+
         const galleryImages = await prisma.galleryImage.findMany({
+            where,
             orderBy: { createdAt: 'desc' },
             select: {
                 id: true,
@@ -76,6 +108,7 @@ export async function GET() {
                 title: true,
                 description: true,
                 minecraftUsername: true,
+                pack: true,
                 createdAt: true,
                 user: {
                     select: {

@@ -5,6 +5,7 @@ import { useState } from 'react';
 export function UploadForm() {
     const [file, setFile] = useState<File | null>(null);
     const [packVersion, setPackVersion] = useState('');
+    const [pack, setPack] = useState<'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS'>('CAPLAND');
     const [uploadProgress, setUploadProgress] = useState(0);
     const [isUploading, setIsUploading] = useState(false);
 
@@ -18,6 +19,7 @@ export function UploadForm() {
         const formData = new FormData();
         formData.append('file', file);
         formData.append('packVersion', packVersion);
+        formData.append('pack', pack);
 
         try {
             const xhr = new XMLHttpRequest();
@@ -35,6 +37,7 @@ export function UploadForm() {
                     // Reset form
                     setFile(null);
                     setPackVersion('');
+                    setPack('CAPLAND');
                     setUploadProgress(0);
                     // You might want to trigger a refresh of the uploads list here
                 } else {
@@ -68,6 +71,22 @@ export function UploadForm() {
                     className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'
                     required
                 />
+            </div>
+
+            <div>
+                <label htmlFor='pack' className='block text-sm font-medium text-gray-700'>
+                    Pack
+                </label>
+                <select
+                    id='pack'
+                    value={pack}
+                    onChange={(e) => setPack(e.target.value as 'CAPLAND' | 'SKYBLOCK' | 'VANILLAPLUS')}
+                    className='mt-1 block w-full rounded-md border-gray-300 shadow-sm focus:border-blue-500 focus:ring-blue-500'
+                    required>
+                    <option value='CAPLAND'>Capland</option>
+                    <option value='SKYBLOCK'>Skyblock</option>
+                    <option value='VANILLAPLUS'>Vanilla++</option>
+                </select>
             </div>
 
             <div>
