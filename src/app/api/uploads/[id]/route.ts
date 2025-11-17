@@ -3,10 +3,18 @@ import { NextRequest, NextResponse } from 'next/server';
 import { prisma } from '@/lib/prisma';
 
 export async function GET(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-    try {
-        const { id: idParam } = await context.params;
-        const id = parseInt(idParam);
+    const { id: idParam } = await context.params;
 
+    if (!idParam) {
+        return NextResponse.json({ error: 'ID parameter is required' }, { status: 400 });
+    }
+
+    const id = parseInt(idParam, 10);
+    if (isNaN(id)) {
+        return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
+    }
+
+    try {
         const upload = await prisma.uploads.findUnique({
             where: { id },
             select: {
@@ -19,8 +27,7 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
             return NextResponse.json({ error: 'Upload not found' }, { status: 404 });
         }
 
-        // Return the file as a download
-        return new NextResponse(upload.fileData, {
+        return new NextResponse(Buffer.from(upload.fileData), {
             headers: {
                 'Content-Type': 'application/zip',
                 'Content-Disposition': `attachment; filename="${upload.fileName}"`
@@ -33,10 +40,18 @@ export async function GET(request: NextRequest, context: { params: Promise<{ id:
 }
 
 export async function DELETE(request: NextRequest, context: { params: Promise<{ id: string }> }) {
-    try {
-        const { id: idParam } = await context.params;
-        const id = parseInt(idParam);
+    const { id: idParam } = await context.params;
 
+    if (!idParam) {
+        return NextResponse.json({ error: 'ID parameter is required' }, { status: 400 });
+    }
+
+    const id = parseInt(idParam, 10);
+    if (isNaN(id)) {
+        return NextResponse.json({ error: 'Invalid ID' }, { status: 400 });
+    }
+
+    try {
         await prisma.uploads.delete({
             where: { id }
         });

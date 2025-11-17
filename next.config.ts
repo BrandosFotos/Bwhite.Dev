@@ -9,12 +9,8 @@ const withBundleAnalyzer = initializeBundleAnalyzer({
 
 // https://nextjs.org/docs/pages/api-reference/next-config-js
 const nextConfig: NextConfig = {
-    output: 'standalone',
-    api: {
-        bodyParser: {
-            sizeLimit: '50mb'
-        }
-    }
+    output: 'standalone'
+    // remove `api` block here
 };
 
 export default withBundleAnalyzer(nextConfig);

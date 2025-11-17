@@ -25,6 +25,11 @@ interface GallerySectionProps {
     onImageUpload: (image: GalleryImage) => void;
 }
 
+const cardVariants = {
+    hidden: { opacity: 0 },
+    visible: { opacity: 1 }
+};
+
 export function GallerySection({ images, isWhitelisted, onImageUpload }: GallerySectionProps) {
     const [showUploadForm, setShowUploadForm] = useState(false);
     const [uploadForm, setUploadForm] = useState({
@@ -64,9 +69,11 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
                         <motion.div
                             key={image.id}
                             className='cursor-pointer overflow-hidden rounded-xl border border-white/10 bg-white/5 backdrop-blur-lg transition-all duration-300 hover:border-white/20'
-                            initial={{ opacity: 0, y: 20 }}
-                            animate={{ opacity: 1, y: 0 }}
-                            transition={{ delay: index * 0.1 }}
+                            initial='hidden'
+                            whileInView='visible'
+                            viewport={{ once: true, amount: 0.2 }}
+                            variants={cardVariants}
+                            transition={{ duration: 0.4, delay: Math.min(index * 0.05, 0.25) }}
                             onClick={() => setSelectedImage(image)}
                             whileHover={{ scale: 1.02 }}>
                             <div className='relative w-full pb-[100%]'>
@@ -76,6 +83,7 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
                                     src={`/api/gallery/${image.id}`}
                                     alt={image.title || 'Gallery image'}
                                     fill
+                                    loading='lazy'
                                     className='absolute top-0 left-0 h-full w-full object-cover'
                                 />
                             </div>
@@ -85,7 +93,7 @@ export function GallerySection({ images, isWhitelisted, onImageUpload }: Gallery
                                     <p className='mb-2 line-clamp-2 text-sm text-gray-300'>{image.description}</p>
                                 )}
                                 <div className='flex items-center justify-between text-xs text-gray-400'>
-                                    <span>by {image.minecraftUsername || 'Anonymous'}</span>
+                                    <span>by {image.minecraftUsername || 'Brandon'}</span>
                                     <span>{formatDate(image.createdAt)}</span>
                                 </div>
                             </div>
