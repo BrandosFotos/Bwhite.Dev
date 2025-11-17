@@ -20,7 +20,7 @@
     "@heroicons/react": "^2.2.0",
     "@heroui/chip": "^2.2.12",
     "@heroui/navbar": "^2.2.17",
-    "@heroui/react": "^2.7.8",
+    "@heroui/react": "^2.8.5",
     "@heroui/system": "^2.4.15",
     "@heroui/theme": "^2.4.23",
     "@prisma/client": "^6.8.2",
