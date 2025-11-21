@@ -85,12 +85,24 @@ export default function VanillaPlusPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}>
                             <h2 className='mb-3 text-2xl font-bold'>About Vanilla+</h2>
-                            <p className={`leading-relaxed ${colors.textSecondary}`}>
+                            <p className={`mb-4 leading-relaxed ${colors.textSecondary}`}>
                                 Vanilla+ is a Minecraft server that enhances the vanilla experience with quality-of-life
                                 improvements and carefully selected additions. Enjoy the classic Minecraft gameplay you
                                 love, with subtle enhancements that make the experience even better. All players are
                                 encouraged to be kind, helpful, and respectful.
                             </p>
+                            <div className={`mx-auto mt-6 max-w-md rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 to-orange-500/10 p-4 backdrop-blur-sm ${colors.textSecondary}`}>
+                                <div className='space-y-2 text-sm'>
+                                    <p className='flex items-center justify-center gap-2'>
+                                        <span className='text-amber-400'>🎮</span>
+                                        <span><strong>Minecraft Version:</strong> 1.21.8</span>
+                                    </p>
+                                    <p className='flex items-center justify-center gap-2'>
+                                        <span className='text-amber-400'>🔌</span>
+                                        <span><strong>IP Address:</strong> mc.bwhite.dev:25585</span>
+                                    </p>
+                                </div>
+                            </div>
                         </motion.div>
                     )}
 
@@ -115,32 +127,55 @@ export default function VanillaPlusPage() {
                             initial={{ opacity: 0, y: 10 }}
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}>
-                            <h2 className='mb-3 text-2xl font-bold'>Join Vanilla++</h2>
-                            <p className={`mb-4 ${colors.textSecondary}`}>
-                                We welcome you to join! We use CurseForge to make distribution of mods, settings, and
-                                configuration easy and quick. Below are instructions to install and join us. We hope to see
-                                you soon!
+                            <h2 className='mb-3 text-2xl font-bold'>Join Vanilla+</h2>
+                            <p className={`mb-6 ${colors.textSecondary}`}>
+                                Ready to jump in? Getting set up is super simple! We use CurseForge to make everything easy — 
+                                it handles all the mods and settings for you automatically.
                             </p>
 
                             {/* Instructions */}
-                            <div className={`mx-auto mb-6 max-w-md space-y-2 text-left ${colors.textSecondary}`}>
-                                <p>
-                                    1. Install the{' '}
-                                    <a
-                                        href='https://curseforge.overwolf.com/'
-                                        target='_blank'
-                                        rel='noopener noreferrer'
-                                        className='text-amber-300 underline'>
-                                        CurseForge Launcher
-                                    </a>
-                                    .
-                                </p>
-                                <p>2. Download the Vanilla+ modpack using the version list below.</p>
-                                <p>
-                                    3. Open CurseForge, click "Import Modpack" (or "Add Existing Modpack"), and select
-                                    the downloaded file.
-                                </p>
-                                <p>4. Launch the modpack and connect using the server IP below.</p>
+                            <div className={`mx-auto mb-6 max-w-md space-y-4 text-left ${colors.textSecondary}`}>
+                                <div className='flex gap-3'>
+                                    <span className='text-2xl'>1️⃣</span>
+                                    <div>
+                                        <p className='mb-1 font-semibold text-white'>Get CurseForge</p>
+                                        <p>
+                                            First, grab the{' '}
+                                            <a
+                                                href='https://curseforge.overwolf.com/'
+                                                target='_blank'
+                                                rel='noopener noreferrer'
+                                                className='text-amber-300 underline hover:text-amber-200'>
+                                                CurseForge Launcher
+                                            </a>
+                                            {' '}— it's free and makes everything super easy!
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className='flex gap-3'>
+                                    <span className='text-2xl'>2️⃣</span>
+                                    <div>
+                                        <p className='mb-1 font-semibold text-white'>Download the Modpack</p>
+                                        <p>Click the download button below to get the latest Vanilla+ modpack.</p>
+                                    </div>
+                                </div>
+                                <div className='flex gap-3'>
+                                    <span className='text-2xl'>3️⃣</span>
+                                    <div>
+                                        <p className='mb-1 font-semibold text-white'>Import & Launch</p>
+                                        <p>
+                                            In CurseForge, click "Import Modpack" and select the file you just downloaded. 
+                                            Then hit play and you're ready to go!
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className='flex gap-3'>
+                                    <span className='text-2xl'>4️⃣</span>
+                                    <div>
+                                        <p className='mb-1 font-semibold text-white'>Connect to the Server</p>
+                                        <p>Use the server address below to join us. We can't wait to see you in-game! 🎉</p>
+                                    </div>
+                                </div>
                             </div>
 
                             {versions.length > 0 && versions[0] && (
@@ -171,12 +206,12 @@ export default function VanillaPlusPage() {
                                     </div>
                                     <div className='mb-4 flex items-center justify-center gap-3'>
                                         <code className='rounded-lg bg-black/30 px-4 py-2 text-lg font-mono font-bold text-white'>
-                                            mc.bwhite.dev
+                                            mc.bwhite.dev:25585
                                         </code>
                                         <button
                                             onClick={async () => {
                                                 try {
-                                                    await navigator.clipboard.writeText('mc.bwhite.dev');
+                                                    await navigator.clipboard.writeText('mc.bwhite.dev:25585');
                                                     setCopied(true);
                                                     setTimeout(() => setCopied(false), 2000);
                                                 } catch (err) {
