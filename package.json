@@ -33,6 +33,7 @@
     "next": "16.0.1",
     "next-auth": "^4.24.11",
     "next-themes": "^0.4.6",
+    "ogl": "^1.0.11",
     "react": "19.2.0",
     "react-dom": "19.2.0",
     "react-magic-motion": "^1.1.2",
@@ -61,6 +62,7 @@
     "prettier": "^3.5.3",
     "prettier-plugin-tailwindcss": "^0.6.11",
     "prisma": "^6.8.2",
+    "shadcn": "^3.5.0",
     "tailwindcss": "^4.1.10",
     "typescript": "^5.8.2",
     "typescript-eslint": "^8.33.0"
