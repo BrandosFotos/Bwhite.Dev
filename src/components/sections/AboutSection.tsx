@@ -1,16 +1,20 @@
 'use client';
 
+import { useEffect, useRef, useState } from 'react';
+
+import ScrollFloat from '../ui/ScrollFloat';
 import { motion, useInView } from 'framer-motion';
-import { useRef, useEffect, useState } from 'react';
 
 const highlights = [
     {
         title: 'Human-first engineering',
-        description: 'Blend reliable systems thinking with intentional visual polish so products feel as good as they look.'
+        description:
+            'Blend reliable systems thinking with intentional visual polish so products feel as good as they look.'
     },
     {
         title: 'Velocity with intention',
-        description: 'Ship fast without throwing away maintainability—documented systems, typed APIs, and tight feedback loops.'
+        description:
+            'Ship fast without throwing away maintainability—documented systems, typed APIs, and tight feedback loops.'
     },
     {
         title: 'Creative mindset',
@@ -52,7 +56,8 @@ function AnimatedCounter({ value, suffix = '' }: { value: number; suffix?: strin
 
     return (
         <span ref={ref} className='text-4xl font-black text-white'>
-            {count}{suffix}
+            {count}
+            {suffix}
         </span>
     );
 }
@@ -63,13 +68,21 @@ export default function AboutSection() {
 
     return (
         <section ref={sectionRef} id='about' className='mx-auto w-full max-w-6xl px-4'>
+            <ScrollFloat
+                animationDuration={3}
+                ease='back.inOut(2)'
+                scrollStart='center bottom+=40%'
+                scrollEnd='bottom bottom-=60%'
+                stagger={0.03}>
+                I am a full-stack dev who values consistency, clarity, and creativity.
+            </ScrollFloat>
             <motion.div
                 className='mb-10 flex flex-col gap-3 text-left'
                 initial={{ opacity: 0, y: 30 }}
                 animate={isInView ? { opacity: 1, y: 0 } : { opacity: 0, y: 30 }}
                 transition={{ duration: 0.6 }}>
                 <motion.p
-                    className='text-sm font-semibold uppercase tracking-[0.2em] text-purple-400'
+                    className='text-sm font-semibold tracking-[0.2em] text-purple-400 uppercase'
                     initial={{ opacity: 0, x: -20 }}
                     animate={isInView ? { opacity: 1, x: 0 } : { opacity: 0, x: -20 }}
                     transition={{ duration: 0.6, delay: 0.1 }}>
@@ -80,8 +93,8 @@ export default function AboutSection() {
                 </h2>
                 <p className='max-w-3xl text-base text-zinc-400'>
                     I build resilient platforms and expressive interfaces for teams who care about the details. Whether
-                    it&apos;s orchestrating infrastructure, architecting APIs, or composing delightful UI systems, I help teams
-                    move from vague idea to production reality.
+                    it&apos;s orchestrating infrastructure, architecting APIs, or composing delightful UI systems, I
+                    help teams move from vague idea to production reality.
                 </p>
             </motion.div>
 
@@ -123,7 +136,7 @@ export default function AboutSection() {
                             transition={{ duration: 0.5, delay: 0.4 + index * 0.1 }}
                             whileHover={{ scale: 1.05 }}>
                             <AnimatedCounter value={stat.value} suffix={stat.suffix} />
-                            <p className='mt-1 text-xs uppercase tracking-widest text-zinc-400 transition-colors group-hover:text-purple-300'>
+                            <p className='mt-1 text-xs tracking-widest text-zinc-400 uppercase transition-colors group-hover:text-purple-300'>
                                 {stat.label}
                             </p>
                         </motion.div>
@@ -133,5 +146,3 @@ export default function AboutSection() {
         </section>
     );
 }
-
-
