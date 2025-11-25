@@ -67,14 +67,14 @@ export default function AboutSection() {
     const isInView = useInView(sectionRef, { once: true, margin: '-100px' });
 
     return (
-        <section ref={sectionRef} id='about' className='mx-auto w-full max-w-6xl px-4'>
+        <section ref={sectionRef} id='about' className='text-center mx-auto w-full max-w-6xl px-4'>
             <ScrollFloat
                 animationDuration={3}
                 ease='back.inOut(2)'
                 scrollStart='center bottom+=40%'
                 scrollEnd='bottom bottom-=60%'
-                stagger={0.03}>
-                I am a full-stack dev who values consistency, clarity, and creativity.
+                stagger={0.05}>
+                    Consistency.   Clarity.   Creativity.
             </ScrollFloat>
             <motion.div
                 className='mb-10 flex flex-col gap-3 text-left'

@@ -3,9 +3,23 @@
 import React, { useEffect, useState } from 'react';
 
 import { BackgroundPatterns } from './components/BackgroundPatterns';
+import { GallerySection } from './components/GallerySection';
 import { VersionsSection } from './components/VersionsSection';
 import { colors, icons } from './components/theme';
 import { motion } from 'framer-motion';
+
+interface GalleryImage {
+    id: number;
+    fileName: string;
+    title?: string;
+    description?: string;
+    minecraftUsername?: string;
+    createdAt: string;
+    user: {
+        name?: string;
+        email: string;
+    };
+}
 
 interface Version {
     id: number;
@@ -22,8 +36,19 @@ export default function VanillaPlusPage() {
         { key: 'join', label: 'Join Vanilla+', icon: icons.join }
     ];
 
+    const [galleryImages, setGalleryImages] = useState<GalleryImage[]>([]);
     const [versions, setVersions] = useState<Version[]>([]);
     const [copied, setCopied] = useState(false);
+
+    useEffect(() => {
+        fetch('/api/gallery?pack=VANILLAPLUS')
+            .then((res) => res.json())
+            .then((data) => {
+                if (Array.isArray(data)) setGalleryImages(data);
+                else setGalleryImages([]);
+            })
+            .catch((err) => console.error('Error fetching gallery images:', err));
+    }, []);
 
     useEffect(() => {
         fetch('/api/versions?pack=VANILLAPLUS')
@@ -95,7 +120,7 @@ export default function VanillaPlusPage() {
                                 <div className='space-y-2 text-sm'>
                                     <p className='flex items-center justify-center gap-2'>
                                         <span className='text-amber-400'>🎮</span>
-                                        <span><strong>Minecraft Version:</strong> 1.21.8</span>
+                                        <span><strong>Minecraft Version:</strong> 1.21.10</span>
                                     </p>
                                     <p className='flex items-center justify-center gap-2'>
                                         <span className='text-amber-400'>🔌</span>
@@ -129,8 +154,9 @@ export default function VanillaPlusPage() {
                             transition={{ duration: 0.5 }}>
                             <h2 className='mb-3 text-2xl font-bold'>Join Vanilla+</h2>
                             <p className={`mb-6 ${colors.textSecondary}`}>
-                                Ready to jump in? Getting set up is super simple! We use CurseForge to make everything easy — 
-                                it handles all the mods and settings for you automatically.
+                                Ready to jump in? While the modpack is <strong className='text-white'>not required</strong> to join, 
+                                we <strong className='text-white'>suggest</strong> using it as it includes client mods that enhance 
+                                the user experience and allow you to join the in-game voice chat.
                             </p>
 
                             {/* Instructions */}
@@ -155,8 +181,8 @@ export default function VanillaPlusPage() {
                                 <div className='flex gap-3'>
                                     <span className='text-2xl'>2️⃣</span>
                                     <div>
-                                        <p className='mb-1 font-semibold text-white'>Download the Modpack</p>
-                                        <p>Click the download button below to get the latest Vanilla+ modpack.</p>
+                                        <p className='mb-1 font-semibold text-white'>Download the Modpack (Optional)</p>
+                                        <p>Click the download button below to get the latest Vanilla+ modpack. This is optional but recommended for the best experience, including in-game voice chat.</p>
                                     </div>
                                 </div>
                                 <div className='flex gap-3'>
@@ -264,6 +290,13 @@ export default function VanillaPlusPage() {
                         </motion.div>
                     )}
                 </div>
+
+                {/* Gallery Section */}
+                <GallerySection
+                    images={galleryImages}
+                    isWhitelisted={true}
+                    onImageUpload={(newImage) => setGalleryImages((prev) => [newImage, ...prev])}
+                />
 
                 {/* Footer */}
                 <footer className='mt-12 pb-6 text-center text-sm text-gray-500'>

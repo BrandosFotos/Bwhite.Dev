@@ -62,7 +62,7 @@ export default function ContactPanel() {
                     </motion.div>
                     <motion.div whileHover={{ scale: 1.05 }} whileTap={{ scale: 0.95 }}>
                         <Link
-                            href='https://cal.com'
+                            href='https://cal.com/brandon-white-n3c0pd'
                             className='inline-flex items-center justify-center rounded-full border border-white/40 px-5 py-2 text-sm font-semibold text-white transition-colors hover:border-white/60 hover:bg-white/10'>
                             Book a call
                         </Link>
