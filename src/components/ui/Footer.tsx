@@ -6,7 +6,7 @@ import { Github, Linkedin, Mail } from 'lucide-react';
 import { motion } from 'framer-motion';
 
 const socialLinks = [
-    { label: 'Email', href: 'mailto:bjwhite97@gmail.com', icon: Mail },
+    { label: 'Email', href: 'mailto:brandon@bwhite.dev', icon: Mail },
     { label: 'GitHub', href: 'https://github.com/BrandosFotos', icon: Github },
     { label: 'LinkedIn', href: 'https://www.linkedin.com/in/brandon-white-dev', icon: Linkedin }
 ];
