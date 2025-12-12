@@ -1,0 +1,174 @@
+name: Test Website
+
+on:
+  push:
+    branches:
+      - dev
+  pull_request:
+    branches:
+      - dev
+
+jobs:
+  test:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25.2.1'
+          cache: 'npm'
+
+      - name: Remove node_modules
+        run: |
+          if [ -d "node_modules" ]; then
+            rm -rf node_modules
+            echo "node_modules removed"
+          else
+            echo "node_modules does not exist, skipping removal"
+          fi
+
+      - name: Install dependencies
+        run: npm install
+        env:
+          # Add any required environment variables here
+          # DATABASE_URL: ${{ secrets.DATABASE_URL }}
+
+      - name: Test dev server
+        run: |
+          echo "Starting dev server..."
+          npm run dev > /tmp/dev-server.log 2>&1 &
+          DEV_PID=$!
+          
+          # Wait for dev server to start (max 60 seconds)
+          echo "Waiting for dev server to start..."
+          for i in {1..60}; do
+            if curl -f http://localhost:3000 > /dev/null 2>&1; then
+              echo "Dev server is running!"
+              break
+            fi
+            if [ $i -eq 60 ]; then
+              echo "Dev server failed to start within 60 seconds"
+              echo "Dev server logs:"
+              cat /tmp/dev-server.log || true
+              kill $DEV_PID 2>/dev/null || true
+              exit 1
+            fi
+            sleep 1
+          done
+          
+          # Test that the server responds
+          if ! curl -f http://localhost:3000 > /dev/null 2>&1; then
+            echo "Dev server is not responding correctly"
+            echo "Dev server logs:"
+            cat /tmp/dev-server.log || true
+            kill $DEV_PID 2>/dev/null || true
+            exit 1
+          fi
+          
+          echo "Dev server test passed!"
+          kill $DEV_PID 2>/dev/null || true
+          wait $DEV_PID 2>/dev/null || true
+
+      - name: Build application
+        run: npm run build
+
+      - name: Test production server
+        run: |
+          echo "Starting production server..."
+          npm run start > /tmp/prod-server.log 2>&1 &
+          START_PID=$!
+          
+          # Wait for production server to start (max 60 seconds)
+          echo "Waiting for production server to start..."
+          for i in {1..60}; do
+            if curl -f http://localhost:3009 > /dev/null 2>&1; then
+              echo "Production server is running!"
+              break
+            fi
+            if [ $i -eq 60 ]; then
+              echo "Production server failed to start within 60 seconds"
+              echo "Production server logs:"
+              cat /tmp/prod-server.log || true
+              kill $START_PID 2>/dev/null || true
+              exit 1
+            fi
+            sleep 1
+          done
+          
+          # Test that the server responds
+          if ! curl -f http://localhost:3009 > /dev/null 2>&1; then
+            echo "Production server is not responding correctly"
+            echo "Production server logs:"
+            cat /tmp/prod-server.log || true
+            kill $START_PID 2>/dev/null || true
+            exit 1
+          fi
+          
+          echo "Production server test passed!"
+          kill $START_PID 2>/dev/null || true
+          wait $START_PID 2>/dev/null || true
+
+      - name: Setup Docker Buildx
+        uses: docker/setup-buildx-action@v3
+
+      - name: Build Docker images
+        run: docker compose build
+        env:
+          # Add any required environment variables here for Docker build
+          # DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          # POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          # POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          # POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+
+      - name: Start Docker containers
+        env:
+          # Add any required environment variables here for Docker
+          # DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          # POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          # POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          # POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          # NODE_ENV: production
+        run: |
+          docker compose up -d
+          
+          # Wait for containers to be healthy (max 60 seconds)
+          echo "Waiting for Docker containers to start..."
+          for i in {1..60}; do
+            if docker compose ps | grep -q "Up"; then
+              if curl -f http://localhost:3009 > /dev/null 2>&1; then
+                echo "Docker containers are running and responding!"
+                break
+              fi
+            fi
+            if [ $i -eq 60 ]; then
+              echo "Docker containers failed to start within 60 seconds"
+              docker compose logs
+              docker compose down
+              exit 1
+            fi
+            sleep 1
+          done
+          
+          # Test that the service responds
+          if ! curl -f http://localhost:3009 > /dev/null 2>&1; then
+            echo "Docker service is not responding correctly"
+            docker compose logs
+            docker compose down
+            exit 1
+          fi
+          
+          echo "Docker test passed!"
+
+      - name: Show Docker logs
+        if: always()
+        run: docker compose logs
+
+      - name: Cleanup Docker containers
+        if: always()
+        run: docker compose down -v
+
