@@ -107,6 +107,35 @@ docker build . -t nextjs-starter-tailwind
 docker run -p 3000:3000 nextjs-starter-tailwind
 ```
 
+### 🧪 Local Testing
+
+Run the full test suite locally (replicates GitHub Actions workflow):
+
+**Windows (PowerShell):**
+```powershell
+.\scripts\test-local.ps1
+```
+
+**Linux/Mac/Git Bash:**
+```bash
+# Make executable (first time only)
+chmod +x scripts/test-local.sh
+
+# Run the script
+./scripts/test-local.sh
+```
+
+The test script will:
+1. Remove and rebuild `node_modules`
+2. Install dependencies
+3. Test dev server (`npm run dev`)
+4. Build application (`npm run build`)
+5. Test production server (`npm run start`)
+6. Build Docker images (`docker compose build`)
+7. Test Docker containers (`docker compose up -d`)
+
+All steps must pass for the test to succeed.
+
 ### ☁ Try it in the Cloud
 
 [![Open in VS Code](https://img.shields.io/badge/Open%20in-VS%20Code-blue?logo=visualstudiocode)](https://vscode.dev/github/SiddharthaMaity/nextjs-15-starter-tailwind)
