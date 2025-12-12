@@ -1,6 +1,5 @@
-import React from 'react';
-
 import { motion } from 'framer-motion';
+import Particles from './ui/Particles';
 
 const ScrollArrow = () => {
     return (
@@ -29,8 +28,21 @@ export default function Hero() {
         <div
             className='relative -mt-[15px] flex h-screen flex-col items-center justify-center px-4 text-center'
             style={{ fontFamily: 'var(--font-sf-pro)' }}>
+            <div className='absolute inset-0 w-full h-full'>
+                <Particles
+                    particleColors={['#ffffff', '#ffffff']}
+                    particleCount={200}
+                    particleSpread={20}
+                    speed={0.1}
+                    particleBaseSize={100}
+                    moveParticlesOnHover={true}
+                    alphaParticles={false}
+                    disableRotation={false}
+                />
+            </div>
+            
             <motion.h1
-                className='mb-36 text-6xl font-bold tracking-tight md:text-8xl'
+                className='relative z-10 mb-36 text-6xl font-bold tracking-tight md:text-8xl'
                 initial={{ opacity: 0, y: 20 }}
                 animate={{ opacity: 1, y: 0 }}
                 transition={{ duration: 0.8 }}>
@@ -58,7 +70,9 @@ export default function Hero() {
             </motion.h1>
 
             {/* Scroll arrow component */}
-            <ScrollArrow />
+            <div className='relative z-10'>
+                <ScrollArrow />
+            </div>
         </div>
     );
 }

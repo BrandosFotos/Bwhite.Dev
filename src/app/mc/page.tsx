@@ -34,9 +34,8 @@ export default function MinecraftPage() {
     const [activeTab, setActiveTab] = useState<ActiveTab>('Capland');
 
     const tabs = [
+        { key: 'Vanilla+' as ActiveTab, label: 'Vanilla+', icon: '🖼️', href: '/mc/vanilla-plus' },
         { key: 'Capland' as ActiveTab, label: 'Capland', icon: '🖥️', href: '/mc/capland' },
-        { key: 'SkyBlock' as ActiveTab, label: 'SkyBlock', icon: '📝', href: '/mc/skyblock' },
-        { key: 'Vanilla+' as ActiveTab, label: 'Vanilla+', icon: '🖼️', href: '/mc/vanilla-plus' }
     ];
 
     return (

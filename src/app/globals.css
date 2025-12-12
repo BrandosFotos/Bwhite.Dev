@@ -7,12 +7,12 @@
 
 /* Default Dark Theme */
 :root {
-    --background: #171717;
+    --background: #060010;
     --foreground: #ffffff;
     --font-sans: 'GeistSans', sans-serif;
     --font-mono: 'GeistMono', monospace;
     --accent-color: #171717;
-    --theme-bg-gradient: #171717;
+    --theme-bg-gradient: #060010;
 }
 
 /* Light Theme */

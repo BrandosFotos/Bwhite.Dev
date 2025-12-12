@@ -110,11 +110,27 @@ export default function CaplandPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}>
                             <h2 className='mb-3 text-2xl font-bold'>About Capland</h2>
-                            <p className={`leading-relaxed ${colors.textSecondary}`}>
-                                Capland is a survival-based Minecraft realm where creativity meets community. Build
+                            <p className={`mb-4 leading-relaxed ${colors.textSecondary}`}>
+                                Capland is a modded survival-based Minecraft realm where creativity meets community. Build
                                 cities, explore, trade, and make memories with friends and family in a safe and
                                 welcoming environment. All players are encouraged to be kind, helpful, and respectful.
                             </p>
+                            <div className={`mx-auto mt-6 max-w-md rounded-xl border border-amber-500/30 bg-gradient-to-r from-amber-500/10 to-orange-500/10 p-4 backdrop-blur-sm ${colors.textSecondary}`}>
+                                <div className='space-y-2 text-sm'>
+                                    <p className='flex items-center justify-center gap-2'>
+                                        <span className='text-amber-400'>🎮</span>
+                                        <span><strong>Minecraft Version:</strong> 1.21.1</span>
+                                    </p>
+                                    <p className='flex items-center justify-center gap-2'>
+                                        <span className='text-amber-400'>🔌</span>
+                                        <span><strong>IP Address:</strong> mc.bwhite.dev</span>
+                                    </p>
+                                    <p className='flex items-center justify-center gap-2'>
+                                        <span className='text-amber-400'>⚙️</span>
+                                        <span><strong>Server Type:</strong> Modded (Modpack Required)</span>
+                                    </p>
+                                </div>
+                            </div>
                         </motion.div>
                     )}
 
@@ -140,31 +156,58 @@ export default function CaplandPage() {
                             animate={{ opacity: 1, y: 0 }}
                             transition={{ duration: 0.5 }}>
                             <h2 className='mb-3 text-2xl font-bold'>Join Capland</h2>
-                            <p className={`mb-4 ${colors.textSecondary}`}>
-                                We welcome you to join! We use CurseForge to make distribution of mods, settings, and
-                                configuration easy and quick. Below are instructions to install and join us. We hope to
-                                see you soon!
+                            <p className={`mb-6 ${colors.textSecondary}`}>
+                                Ready to jump in? Capland is a <strong className='text-white'>modded server</strong>, so you'll need the modpack to play. 
+                                Don't worry though — getting set up is super simple! We use CurseForge to make everything easy — 
+                                it handles all the mods and settings for you automatically.
                             </p>
 
                             {/* Instructions */}
-                            <div className={`mx-auto mb-6 max-w-md space-y-2 text-left ${colors.textSecondary}`}>
-                                <p>
-                                    1. Install the{' '}
-                                    <a
-                                        href='https://curseforge.overwolf.com/'
-                                        target='_blank'
-                                        rel='noopener noreferrer'
-                                        className='text-amber-300 underline'>
-                                        CurseForge Launcher
-                                    </a>
-                                    .
-                                </p>
-                                <p>2. Download the Capland modpack using the version list below.</p>
-                                <p>
-                                    3. Open CurseForge, click "Import Modpack" (or "Add Existing Modpack"), and select
-                                    the downloaded file.
-                                </p>
-                                <p>4. Launch the modpack and connect using the server IP below.</p>
+                            <div className={`mx-auto mb-6 max-w-md space-y-4 text-left ${colors.textSecondary}`}>
+                                <div className='flex gap-3'>
+                                    <span className='text-2xl'>1️⃣</span>
+                                    <div>
+                                        <p className='mb-1 font-semibold text-white'>Get CurseForge</p>
+                                        <p>
+                                            First, grab the{' '}
+                                            <a
+                                                href='https://curseforge.overwolf.com/'
+                                                target='_blank'
+                                                rel='noopener noreferrer'
+                                                className='text-amber-300 underline hover:text-amber-200'>
+                                                CurseForge Launcher
+                                            </a>
+                                            {' '}— it's free and makes everything super easy!
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className='flex gap-3'>
+                                    <span className='text-2xl'>2️⃣</span>
+                                    <div>
+                                        <p className='mb-1 font-semibold text-white'>Download the Modpack</p>
+                                        <p>
+                                            <strong className='text-white'>Important:</strong> Capland requires the modpack to connect. 
+                                            Click the download button below to get the latest Capland modpack.
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className='flex gap-3'>
+                                    <span className='text-2xl'>3️⃣</span>
+                                    <div>
+                                        <p className='mb-1 font-semibold text-white'>Import & Launch</p>
+                                        <p>
+                                            In CurseForge, click "Import Modpack" and select the file you just downloaded. 
+                                            Then hit play and you're ready to go!
+                                        </p>
+                                    </div>
+                                </div>
+                                <div className='flex gap-3'>
+                                    <span className='text-2xl'>4️⃣</span>
+                                    <div>
+                                        <p className='mb-1 font-semibold text-white'>Connect to the Server</p>
+                                        <p>Use the server address below to join us. We can't wait to see you in-game! 🎉</p>
+                                    </div>
+                                </div>
                             </div>
 
                             {versions.length > 0 && versions[0] && (
@@ -239,7 +282,7 @@ export default function CaplandPage() {
                                         </button>
                                     </div>
                                     <p className='text-center text-sm text-gray-300'>
-                                        <span className='text-amber-400'>💡</span> Modpack works with{' '}
+                                        <span className='text-amber-400'>💡</span> <strong className='text-white'>Capland is modded</strong> — the modpack is required to connect. Works with{' '}
                                         <a
                                             href='https://curseforge.overwolf.com/'
                                             target='_blank'
