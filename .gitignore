@@ -6,8 +6,16 @@
 .pnp.js
 .yarn/install-state.gz
 
-# environment variables
+# environment variables - CRITICAL: Never commit these!
 .env
+.env.local
+.env.development
+.env.development.local
+.env.test
+.env.test.local
+.env.production
+.env.production.local
+.env*.local
 
 # testing
 /coverage
@@ -22,14 +30,16 @@
 # misc
 .DS_Store
 *.pem
+*.key
+*.p12
+*.pfx
 
 # debug
 npm-debug.log*
 yarn-debug.log*
 yarn-error.log*
-
-# local env files
-.env*.local
+pnpm-debug.log*
+lerna-debug.log*
 
 # vercel
 .vercel
@@ -38,15 +48,79 @@ yarn-error.log*
 *.tsbuildinfo
 next-env.d.ts
 
+# prisma
 /src/generated/prisma
-
-/src/generated/prisma
-
-/src/generated/prisma
-
 prisma/migrations/
 *.db
 *.db-journal
 
+# IDE and editor files
+.vscode/settings.json
+.vscode/launch.json
+.idea/
+*.swp
+*.swo
+*~
+
+# OS files
+Thumbs.db
+.Spotlight-V100
+.Trashes
+
+# Secrets and credentials - CRITICAL
+secrets/
+credentials/
+*.secret
+*.credentials
+config.local.*
+settings.local.json
+/docs
+
+# Database dumps and backups
+*.sql
+*.sqlite
+*.sqlite3
+dump.rdb
+backup/
+backups/
+
+# Logs
+logs/
+*.log
+
+# Temporary files
+tmp/
+temp/
+*.tmp
+*.temp
+
+# Docker overrides (if you need local overrides)
+docker-compose.override.yml
+
+# Personal scripts
 update_check.sh
 update_check.log
+
+# SSH keys
+*.ppk
+id_rsa
+id_ed25519
+
+# CI/CD secrets (if stored locally)
+.secrets/
+.credentials/
+
+# AWS credentials
+.aws/credentials
+.aws/config
+
+# Google Cloud credentials
+*-credentials.json
+*-service-account.json
+gcloud-service-key.json
+
+# Claude Code local settings
+.claude/settings.local.json
+
+# Cursor IDE local settings
+.cursor/settings.local.json

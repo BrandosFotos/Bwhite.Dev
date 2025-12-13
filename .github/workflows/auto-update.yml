@@ -1,0 +1,79 @@
+name: Auto Update Dependencies
+
+on:
+  schedule:
+    # Runs every Monday at 9 AM UTC
+    - cron: '0 9 * * 1'
+  workflow_dispatch: # Allows manual triggering
+
+permissions:
+  contents: write
+  pull-requests: write
+
+jobs:
+  update-dependencies:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+
+    steps:
+      - name: Checkout code
+        uses: actions/checkout@v4
+        with:
+          token: ${{ secrets.GITHUB_TOKEN }}
+
+      - name: Setup Node.js
+        uses: actions/setup-node@v4
+        with:
+          node-version: '25.2.1'
+          cache: 'npm'
+
+      - name: Update npm dependencies
+        run: |
+          echo "Checking for outdated packages..."
+          npm outdated || true
+
+          echo "Updating dependencies..."
+          npm update
+
+          echo "Running audit fix..."
+          npm audit fix || true
+
+      - name: Update Prisma
+        run: |
+          echo "Updating Prisma..."
+          npx prisma generate || true
+
+      - name: Run linter
+        run: npm run lint:fix || true
+
+      - name: Run formatter
+        run: npm run format || true
+
+      - name: Check for changes
+        id: git-check
+        run: |
+          git diff --exit-code package.json package-lock.json || echo "changes=true" >> $GITHUB_OUTPUT
+
+      - name: Commit and push changes
+        if: steps.git-check.outputs.changes == 'true'
+        run: |
+          git config --local user.email "github-actions[bot]@users.noreply.github.com"
+          git config --local user.name "github-actions[bot]"
+          git add .
+          git commit -m "chore: auto-update dependencies
+
+🤖 Generated with GitHub Actions
+
+Co-Authored-By: GitHub Actions <noreply@github.com>"
+          git push
+
+      - name: Create summary
+        if: always()
+        run: |
+          echo "### Dependency Update Summary" >> $GITHUB_STEP_SUMMARY
+          echo "" >> $GITHUB_STEP_SUMMARY
+          if [ "${{ steps.git-check.outputs.changes }}" == "true" ]; then
+            echo "✅ Dependencies were updated and committed" >> $GITHUB_STEP_SUMMARY
+          else
+            echo "ℹ️ No dependency updates needed" >> $GITHUB_STEP_SUMMARY
+          fi

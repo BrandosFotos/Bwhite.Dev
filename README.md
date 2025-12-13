@@ -1,157 +1,124 @@
-# Next.js 15 Starter (tailwind) [[LIVE DEMO](https://nextjs-15-starter-tailwind.vercel.app/)]
+# Bwhite.Dev
 
-*This is the Tailwind version for Next.js 15 Starter, you may be interested in other templates too -*
+A modern, full-stack web application built with Next.js 16, React 19, and PostgreSQL.
 
-- [**Next.js 15 Starter Core**](https://github.com/SiddharthaMaity/nextjs-15-starter-core)
-- [**Next.js 15 Starter with Shadcn UI**](https://github.com/SiddharthaMaity/nextjs-15-starter-shadcn)
+## Tech Stack
 
-Welcome to the **Next.js 15 Starter** repository! This starter template is built with Next.js 15, React 19, TypeScript 5, Tailwind CSS 4 and comes packed with several powerful tools and configurations to accelerate your project setup and streamline development workflows using VS Code.
+- **Framework**: Next.js 16 with Turbopack
+- **UI**: React 19, Tailwind CSS 4, HeroUI
+- **Database**: PostgreSQL with Prisma ORM
+- **Auth**: NextAuth.js
+- **Animation**: Framer Motion, GSAP
+- **Deployment**: Docker
+- **Language**: TypeScript 5
 
-![Next.js 15 Starter](public/images/screenshot.png)
-
-## 🚀 What's Included
-
-- **Next.js 15**
-- **React 19**
-- **TypeScript 5**
-- **ESLint 9**
-- **Prettier 3**
-- **Tailwind CSS 4**
-- **App Directory**
-- **System, Light & Dark Mode**
-- **Next.js Bundle Analyzer**
-- **Dockerfile** with Node.js 22.14.0 (Alpine)
-
-### 🛠️ ESLint Plugins
-
-- [**@eslint/js**](https://www.npmjs.com/package/@eslint/js)
-- [**typescript-eslint**](https://github.com/typescript-eslint/typescript-eslint)
-- [**eslint-plugin-react**](https://github.com/jsx-eslint/eslint-plugin-react)
-- [**@next/eslint-plugin-next**](https://github.com/vercel/next.js)
-- [**eslint-config-prettier**](eslint-config-prettier)
-- [**eslint-plugin-tailwindcss**](https://github.com/francoismassart/eslint-plugin-tailwindcss)
-- [**eslint-plugin-import**](https://github.com/import-js/eslint-plugin-import)
-- [**eslint-plugin-promise**](https://github.com/eslint-community/eslint-plugin-promise)
-
-### ✨ Prettier Plugins
-
-- [**@trivago/prettier-plugin-sort-imports**](https://github.com/trivago/prettier-plugin-sort-imports)
-- [**prettier-plugin-tailwindcss**](https://github.com/tailwindlabs/prettier-plugin-tailwindcss)
-
-### 💻 VS Code Extensions (Recommended)
-
-To enhance development experience, install the following VS Code extensions:
-
-- [**Auto Close Tag**](https://marketplace.visualstudio.com/items?itemName=formulahendry.auto-close-tag)
-- [**Better Comments**](https://marketplace.visualstudio.com/items?itemName=aaron-bond.better-comments)
-- [**DotENV**](https://marketplace.visualstudio.com/items?itemName=mikestead.dotenv)
-- [**EditorConfig for VS Code**](https://marketplace.visualstudio.com/items?itemName=EditorConfig.EditorConfig)
-- [**ESLint**](https://marketplace.visualstudio.com/items?itemName=dbaeumer.vscode-eslint)
-- [**formate: CSS/LESS/SCSS formatter**](https://marketplace.visualstudio.com/items?itemName=MikeBovenlander.formate)
-- [**Git History**](https://marketplace.visualstudio.com/items?itemName=donjayamanne.githistory)
-- [**Import Cost**](https://marketplace.visualstudio.com/items?itemName=wix.vscode-import-cost)
-- [**JavaScript Booster**](https://marketplace.visualstudio.com/items?itemName=sburg.vscode-javascript-booster)
-- [**npm Intellisense**](https://marketplace.visualstudio.com/items?itemName=christian-kohler.npm-intellisense)
-- [**Prettier - Code formatter**](https://marketplace.visualstudio.com/items?itemName=esbenp)
-- [**Todo Tree**](https://marketplace.visualstudio.com/items?itemName=Gruntfuggly.todo-tree)
-- [**Turbo Console Log**](https://marketplace.visualstudio.com/items?itemName=ChakrounAnas.turbo-console-log)
-- [**Package Json Upgrade**](https://marketplace.visualstudio.com/items?itemName=codeandstuff.package-json-upgrade)
-- [**Visual Studio Code Commitizen Support**](https://marketplace.visualstudio.com/items?itemName=KnisterPeter.vscode-commitizen)
-- [**Markdown All in One**](https://marketplace.visualstudio.com/items?itemName=yzhang.markdown-all-in-one)
-- [**Prisma**]<https://marketplace.visualstudio.com/items?itemName=Prisma.prisma>
-
-## 🏁 Getting Started
+## Quick Start
 
 ### Prerequisites
-
-- **Node.js**: Version 20.18.0 or higher
-- **Docker**: For containerized deployment (optional but recommended)
+- Node.js >= 25.2.1
+- npm >= 10.0.0
+- Docker (optional)
 
 ### Installation
 
-1. **Clone the Repository**:
+```bash
+# Install dependencies
+npm install
 
-    ```bash
-    git clone https://github.com/yourusername/nextjs-15-starter-tailwind.git
-    cd nextjs-15-starter-tailwind
-    ```
+# Set up environment
+cp .env.example .env
+# Edit .env with your credentials
 
-2. **Install Dependencies**:
+# Run database migrations
+npx prisma generate
+npx prisma migrate dev
 
-    ```bash
-    npm install
-    # or with Yarn
-    yarn install
-    ```
+# Start development server
+npm run dev
+```
 
-3. **Run Development Server**:
+Visit http://localhost:3000
 
-    ```bash
-    npm run dev
-    # or with Yarn
-    yarn dev
-    ```
+## Available Scripts
 
-4. **Build for Production**:
+| Command | Description |
+|---------|-------------|
+| `npm run dev` | Start development server with Turbopack |
+| `npm run build` | Build for production |
+| `npm run start` | Start production server (port 3009) |
+| `npm run lint` | Run ESLint |
+| `npm run lint:fix` | Auto-fix linting issues |
+| `npm run format` | Format code with Prettier |
 
-    ```bash
-    npm run build
-    ```
-
-### 🐳 Docker Setup
-
-To use Docker, make sure Docker is installed on your machine. Then, build and run the Docker container:
+## Docker
 
 ```bash
-docker build . -t nextjs-starter-tailwind
-docker run -p 3000:3000 nextjs-starter-tailwind
+# Start all services
+docker compose up -d
+
+# Stop all services
+docker compose down
+
+# View logs
+docker compose logs -f
+
+# Rebuild
+docker compose build --no-cache
 ```
 
-### 🧪 Local Testing
+## Project Structure
 
-Run the full test suite locally (replicates GitHub Actions workflow):
-
-**Windows (PowerShell):**
-```powershell
-.\scripts\test-local.ps1
+```
+Bwhite.Dev/
+├── .github/workflows/    # GitHub Actions CI/CD
+├── .claude/             # Claude Code agents
+├── docs/                # Documentation
+│   ├── SETUP.md        # Setup guide
+│   ├── SECURITY.md     # Security checklist
+│   └── AGENTS.md       # Claude agents guide
+├── prisma/             # Database schema & migrations
+├── public/             # Static assets
+├── scripts/            # Utility scripts
+├── src/
+│   ├── app/           # Next.js app directory
+│   ├── components/    # React components
+│   └── lib/           # Utilities & configs
+├── .env.example       # Environment template
+├── docker-compose.yaml
+└── package.json
 ```
 
-**Linux/Mac/Git Bash:**
-```bash
-# Make executable (first time only)
-chmod +x scripts/test-local.sh
+## Documentation
 
-# Run the script
-./scripts/test-local.sh
+- [Setup Guide](docs/SETUP.md) - Detailed setup instructions
+- [Security](docs/SECURITY.md) - Security audit & best practices
+- [Claude Agents](docs/AGENTS.md) - Using Claude Code agents
+
+## Features
+
+- 🔐 Authentication with NextAuth.js
+- 🗄️ PostgreSQL database with Prisma
+- 🎨 Modern UI with HeroUI & Tailwind
+- 🌗 Dark mode support
+- 🚀 Optimized with Turbopack
+- 🐳 Docker support
+- 🤖 GitHub Actions CI/CD
+- 🛡️ Type-safe with TypeScript
+
+## Environment Variables
+
+Required variables (see `.env.example` for full list):
+
+```env
+DATABASE_URL="postgresql://user:password@localhost:5432/db"
+NEXTAUTH_URL="http://localhost:3000"
+NEXTAUTH_SECRET="your-secret-here"
 ```
 
-The test script will:
-1. Remove and rebuild `node_modules`
-2. Install dependencies
-3. Test dev server (`npm run dev`)
-4. Build application (`npm run build`)
-5. Test production server (`npm run start`)
-6. Build Docker images (`docker compose build`)
-7. Test Docker containers (`docker compose up -d`)
+## License
 
-All steps must pass for the test to succeed.
+MIT License - See [LICENSE.md](LICENSE.md)
 
-### ☁ Try it in the Cloud
+---
 
-[![Open in VS Code](https://img.shields.io/badge/Open%20in-VS%20Code-blue?logo=visualstudiocode)](https://vscode.dev/github/SiddharthaMaity/nextjs-15-starter-tailwind)
-
-[![Open in GitHub Codespaces](https://img.shields.io/badge/Open%20in-GitHub%20Codespaces-blue?logo=github)](https://github.com/codespaces/new?hide_repo_select=true&ref=main&repo=SiddharthaMaity/nextjs-15-starter-tailwind)
-
-[![Open in CodeSandbox](https://codesandbox.io/static/img/play-codesandbox.svg)](https://codesandbox.io/s/github/SiddharthaMaity/nextjs-15-starter-tailwind)
-
-[![Open in Gitpod](https://gitpod.io/button/open-in-gitpod.svg)](https://gitpod.io/#https://github.com/SiddharthaMaity/nextjs-15-starter-tailwind)
-
-[![Open in StackBlitz](https://developer.stackblitz.com/img/open_in_stackblitz_small.svg)](https://stackblitz.com/github/SiddharthaMaity/nextjs-15-starter-tailwind)
-
-[![Open in Repl.it](https://replit.com/badge/github/SiddharthaMaity/nextjs-15-starter-tailwind)](https://replit.com/github/SiddharthaMaity/nextjs-15-starter-tailwind)
-
-[![Open in Glitch](https://img.shields.io/badge/Open%20in-Glitch-blue?logo=glitch)](https://glitch.com/edit/#!/import/github/SiddharthaMaity/nextjs-15-starter-tailwind)
-
-### License
-
-This project is licensed under the MIT License. See the [LICENSE](LICENSE) file for details.
+For detailed setup instructions, see [docs/SETUP.md](docs/SETUP.md)

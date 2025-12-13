@@ -22,7 +22,7 @@ fi
 # Step 2: Install dependencies
 echo ""
 echo "[2/7] Installing dependencies..."
-npm install
+npm install --legacy-peer-deps
 if [ $? -ne 0 ]; then
     echo "✗ npm install failed"
     exit 1
@@ -32,6 +32,17 @@ echo "✓ Dependencies installed"
 # Step 3: Test dev server
 echo ""
 echo "[3/7] Testing dev server..."
+
+# Check if port 3000 is available
+echo "Checking if port 3000 is available..."
+if lsof -Pi :3000 -sTCP:LISTEN -t >/dev/null 2>&1; then
+    echo "✗ Port 3000 is already in use"
+    echo "Please stop any processes using port 3000 and try again"
+    echo "You can find the process with: lsof -i :3000"
+    exit 1
+fi
+echo "✓ Port 3000 is available"
+
 echo "Starting dev server..."
 npm run dev > /tmp/dev-server.log 2>&1 &
 DEV_PID=$!
@@ -83,6 +94,17 @@ echo "✓ Build completed"
 # Step 5: Test production server
 echo ""
 echo "[5/7] Testing production server..."
+
+# Check if port 3009 is available
+echo "Checking if port 3009 is available..."
+if lsof -Pi :3009 -sTCP:LISTEN -t >/dev/null 2>&1; then
+    echo "✗ Port 3009 is already in use"
+    echo "Please stop any processes using port 3009 and try again"
+    echo "You can find the process with: lsof -i :3009"
+    exit 1
+fi
+echo "✓ Port 3009 is available"
+
 echo "Starting production server..."
 npm run start > /tmp/prod-server.log 2>&1 &
 START_PID=$!
@@ -124,6 +146,16 @@ sleep 2
 # Step 6: Build Docker images
 echo ""
 echo "[6/7] Building Docker images..."
+
+# Check if Docker is running
+echo "Checking if Docker is running..."
+if ! docker info >/dev/null 2>&1; then
+    echo "✗ Docker is not running"
+    echo "Please start Docker and try again"
+    exit 1
+fi
+echo "✓ Docker is running"
+
 docker compose build
 if [ $? -ne 0 ]; then
     echo "✗ Docker build failed"

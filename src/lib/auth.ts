@@ -1,4 +1,4 @@
-import { db } from '@/lib/db';
+import { prisma } from '@/lib/prisma';
 
 import bcrypt from 'bcryptjs';
 import { NextAuthOptions } from 'next-auth';
@@ -24,7 +24,7 @@ export const authOptions: NextAuthOptions = {
                     return null;
                 }
 
-                const user = await db.user.findUnique({
+                const user = await prisma.user.findUnique({
                     where: {
                         email: credentials.email
                     }

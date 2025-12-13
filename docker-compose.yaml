@@ -7,10 +7,10 @@ services:
         ports:
             - '3009:3000'
         environment:
-            - NODE_ENV=${NODE_ENV}
-            - PORT=${PORT}
-            - HOSTNAME=${HOSTNAME}
-            - DATABASE_URL=${DATABASE_URL}
+            - NODE_ENV=${NODE_ENV:-production}
+            - PORT=${PORT:-3000}
+            - HOSTNAME=${HOSTNAME:-0.0.0.0}
+            - DATABASE_URL=${DATABASE_URL:?DATABASE_URL is required}
         # depends_on:
         #     - postgres
         restart: unless-stopped
@@ -19,9 +19,9 @@ services:
         image: postgres:16
         container_name: postgres-db
         environment:
-            - POSTGRES_USER=${POSTGRES_USER}
-            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD}
-            - POSTGRES_DB=${POSTGRES_DB}
+            - POSTGRES_USER=${POSTGRES_USER:?POSTGRES_USER is required}
+            - POSTGRES_PASSWORD=${POSTGRES_PASSWORD:?POSTGRES_PASSWORD is required}
+            - POSTGRES_DB=${POSTGRES_DB:-bwhite_dev}
         ports:
             - '5432:5432'
         volumes:
