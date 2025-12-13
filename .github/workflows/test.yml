@@ -32,6 +32,11 @@ jobs:
           npm ci
 
       - name: Test dev server
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NODE_ENV: development
+          PORT: 3000
+          HOSTNAME: localhost
         run: |
           echo "Starting dev server..."
           npm run dev > /tmp/dev-server.log 2>&1 &
@@ -66,9 +71,17 @@ jobs:
           wait $DEV_PID 2>/dev/null || true
 
       - name: Build application
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NODE_ENV: production
         run: npm run build
 
       - name: Test production server
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          NODE_ENV: production
+          PORT: 3009
+          HOSTNAME: localhost
         run: |
           echo "Starting production server..."
           npm run start > /tmp/prod-server.log 2>&1 &
@@ -106,9 +119,25 @@ jobs:
         uses: docker/setup-buildx-action@v3
 
       - name: Build Docker images
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          NODE_ENV: production
+          PORT: 3000
+          HOSTNAME: 0.0.0.0
         run: docker compose build
 
       - name: Start Docker containers
+        env:
+          DATABASE_URL: ${{ secrets.DATABASE_URL }}
+          POSTGRES_USER: ${{ secrets.POSTGRES_USER }}
+          POSTGRES_PASSWORD: ${{ secrets.POSTGRES_PASSWORD }}
+          POSTGRES_DB: ${{ secrets.POSTGRES_DB }}
+          NODE_ENV: production
+          PORT: 3000
+          HOSTNAME: 0.0.0.0
         run: |
           docker compose up -d
           
